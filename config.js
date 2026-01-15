@@ -1,8 +1,0 @@
-// Sound of Code - Configuration
-// Get your free API key from: https://aistudio.google.com/app/apikey
-
-const CONFIG = {
-    geminiApiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
-    geminiApiKey: 'AIzaSyBAWiFXTg3zyGjv0nuM1T-OJGI6d6IWxIs'  // Replace with your key
-};
-
