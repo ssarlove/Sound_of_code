@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the sound of code</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unica+One&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --text: #e0e0e0;
+      --accent: #ff3e00;
+      --accent-2: #00ff88;
+      --accent-3: #ff00ff;
+      --border: #333;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      line-height: 1.4;
+      overflow-x: hidden;
+      cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-14z" fill="%23e0e0e0"/></svg>') 0 0, auto;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+
+    .logo {
+      font-family: 'Unica One', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text);
+    }
+
+    .status {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .status::before {
+      content: '●';
+      display: inline-block;
+      margin-right: 0.5rem;
+      color: var(--accent-2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    main {
+      min-height: 100vh;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero {
+      min-height: 65vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-family: 'Unica One', sans-serif;
+      font-size: clamp(3rem, 12vw, 10rem);
+      line-height: 0.85;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 span {
+      display: block;
+    }
+
+    .hero h1 .highlight {
+      color: var(--accent);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -5%;
+      right: -5%;
+      height: 0.15em;
+      background: var(--accent-3);
+      z-index: -1;
+    }
+
+    .sound-wave {
+      position: absolute;
+      top: 50%;
+      right: -10%;
+      transform: translateY(-50%);
+      width: 40vw;
+      height: 40vw;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .sound-wave svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .intro-text {
+      max-width: 400px;
+      margin: 2rem 0;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .intro-text .quote {
+      font-style: italic;
+      border-left: 4px solid var(--accent);
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      color: var(--accent-2);
+    }
+
+    .input-section {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 1rem;
+      margin: 3rem 0;
+      align-items: end;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--text);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      padding: 0.5rem 0;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-bottom-color: var(--accent);
+    }
+
+    .input-wrapper input::placeholder {
+      color: #555;
+    }
+
+    .big-button {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      font-family: 'Unica One', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .big-button:hover {
+      background: var(--accent-2);
+      transform: translate(-4px, -4px);
+      box-shadow: 4px 4px 0 var(--text);
+    }
+
+    .big-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .download-btn {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      font-family: 'Unica One', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .download-btn:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .download-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .visualizer-container {
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .visualizer-label {
+      position: absolute;
+      top: -2rem;
+      left: 0;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #555;
+    }
+
+    .visualizer {
+      width: 100%;
+      height: 200px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        #1a1a1a 1px,
+        #1a1a1a 2px
+      );
+      position: relative;
+      overflow: hidden;
+    }
+
+    .visualizer canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .visualizer .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 10, 10, 0.9);
+      transition: opacity 0.3s;
+    }
+
+    .visualizer .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .visualizer .overlay span {
+      font-family: 'Unica One', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      animation: blink 1.5s infinite;
+    }
+
+    .visualizer .overlay .detail {
+      font-size: 0.7rem;
+      color: #666;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.3; }
+    }
+
+    .analysis-section {
+      margin: 3rem 0;
+    }
+
+    .analysis-header {
+      font-family: 'Unica One', sans-serif;
+      font-size: 2rem;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      display: inline-block;
+      background: var(--text);
+      color: var(--bg);
+      padding: 0.5rem 1rem;
+    }
+
+    .mood-display {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .mood-card {
+      background: var(--bg);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .mood-card .icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .mood-card .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .mood-card .value {
+      font-family: 'Unica One', sans-serif;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .mood-card .bar {
+      height: 4px;
+      background: var(--border);
+      margin-top: 1rem;
+      position: relative;
+    }
+
+    .mood-card .bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.5s ease;
+    }
+
+    .song-info {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: var(--border);
+      border: 2px solid var(--text);
+    }
+
+    .song-info h3 {
+      font-family: 'Unica One', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .song-info p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .song-info .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .song-info .tag {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .mapping-panel {
+      margin: 2rem 0;
+      padding: 2rem;
+      border: 2px dashed var(--border);
+      background: rgba(255, 62, 0, 0.03);
+    }
+
+    .mapping-header {
+      font-family: 'Unica One', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mapping-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .mapping-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mapping-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+    }
+
+    .mapping-arrow {
+      color: var(--accent-2);
+      font-size: 1rem;
+      margin: 0.25rem 0;
+    }
+
+    .mapping-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+      background: var(--border);
+      padding: 0.5rem 0.75rem;
+      border-left: 3px solid var(--accent);
+    }
+
+    .mapping-explanation {
+      font-size: 0.7rem;
+      color: #888;
+      margin-top: 0.25rem;
+      line-height: 1.4;
+    }
+
+    .floating-tags {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 50;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.6rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      align-self: flex-end;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .tag:nth-child(2) { animation-delay: -2s; }
+    .tag:nth-child(3) { animation-delay: -4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .marquee-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow: hidden;
+      height: 2rem;
+      background: var(--accent);
+      color: var(--bg);
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .marquee {
+      display: flex;
+      animation: scroll 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee span {
+      font-family: 'Unica One', sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 2rem;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .code-sample {
+      position: fixed;
+      font-size: 0.6rem;
+      color: #333;
+      font-family: 'Space Mono', monospace;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .code-sample:nth-child(1) { top: 30%; left: 5%; }
+    .code-sample:nth-child(2) { top: 60%; right: 8%; }
+    .code-sample:nth-child(3) { bottom: 25%; left: 10%; }
+
+    .player-controls {
+      position: fixed;
+      bottom: 4rem;
+      left: 2rem;
+      display: flex;
+      gap: 1rem;
+      z-index: 60;
+    }
+
+    .control-btn {
+      width: 50px;
+      height: 50px;
+      background: var(--bg);
+      border: 2px solid var(--text);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-size: 1.5rem;
+    }
+
+    .control-btn:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .control-btn.playing {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text);
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    @media (max-width: 900px) {
+      .input-section {
+        grid-template-columns: 1fr;
+      }
+
+      .mood-display {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sound-wave {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 15vw, 5rem);
+      }
+
+      .floating-tags {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">sound_of_code</div>
+    <div class="status" id="status">ready to listen</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>
+        <span>your code</span>
+        <span>speaks in</span>
+        <span class="highlight">frequencies</span>
+      </h1>
+      <div class="sound-wave">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M0,50 Q10,20 20,50 T40,50 T60,50 T80,50 T100,50"
+                stroke="currentColor" fill="none" stroke-width="2"/>
+          <path d="M0,50 Q15,80 25,50 T50,50 T75,50 T100,50"
+                stroke="currentColor" fill="none" stroke-width="1" opacity="0.5"/>
+          <path d="M0,50 Q5,30 10,50 T20,50 T30,50 T40,50"
+                stroke="currentColor" fill="none" stroke-width="0.5" opacity="0.3"/>
+        </svg>
+      </div>
+    </section>
+
+    <div class="intro-text">
+      <p>every repository has a rhythm. every codebase has a melody.</p>
+      <p>we don't just read your code. we listen to it.</p>
+      <div class="quote">"code is poetry. poetry has sound."</div>
+      <p>drop a github url and hear what your project sounds like.</p>
+    </div>
+
+    <div class="input-section">
+      <div class="input-wrapper">
+        <label>github repository</label>
+        <input type="text" placeholder="username/repo" id="repo-url" value="facebook/react">
+      </div>
+      <button class="big-button" id="generate-btn">listen</button>
+      <button class="download-btn" id="download-btn" disabled>↓ save</button>
+    </div>
+
+    <div class="visualizer-container">
+      <div class="visualizer-label">waveform</div>
+      <div class="visualizer">
+        <canvas id="wave-canvas"></canvas>
+        <div class="overlay" id="visualizer-overlay">
+          <span id="overlay-text">press listen to begin</span>
+          <div class="detail" id="overlay-detail">or try facebook/react as demo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-section" id="analysis-section" style="display: none;">
+      <h2 class="analysis-header">what we heard</h2>
+
+      <div class="mood-display">
+        <div class="mood-card">
+          <div class="icon">🎭</div>
+          <div class="label">mood</div>
+          <div class="value" id="mood-overall">-</div>
+          <div class="bar"><div class="bar-fill" id="mood-overall-bar" style="width: 50%"></div></div>
+        </div>
+        <div class="mood-card">
+          <div class="icon">⚡</div>
+          <div class="label">energy</div>
+          <div class="value" id="mood-energy">-</div>
+          <div class="bar"><div class="bar-fill" id="mood-energy-bar" style="width: 50%"></div></div>
+        </div>
+        <div class="mood-card">
+          <div class="icon">🌀</div>
+          <div class="label">complexity</div>
+          <div class="value" id="mood-complexity">-</div>
+          <div class="bar"><div class="bar-fill" id="mood-complexity-bar" style="width: 50%"></div></div>
+        </div>
+        <div class="mood-card">
+          <div class="icon">🎵</div>
+          <div class="label">scale</div>
+          <div class="value" id="mood-scale">-</div>
+          <div class="bar"><div class="bar-fill" id="mood-scale-bar" style="width: 75%"></div></div>
+        </div>
+      </div>
+
+      <div class="mapping-panel" id="mapping-panel" style="display: none;">
+        <div class="mapping-header">code → sound mapping</div>
+        <div class="mapping-grid">
+          <div class="mapping-item">
+            <span class="mapping-label">Project Type</span>
+            <span class="mapping-arrow">↓</span>
+            <span class="mapping-value" id="mapping-type">-</span>
+            <span class="mapping-explanation" id="mapping-type-exp">game repos → intense/rhythmic style</span>
+          </div>
+          <div class="mapping-item">
+            <span class="mapping-label">Content Sentiment</span>
+            <span class="mapping-arrow">↓</span>
+            <span class="mapping-value" id="mapping-sentiment">-</span>
+            <span class="mapping-explanation" id="mapping-sentiment-exp">positive words → brighter scales</span>
+          </div>
+          <div class="mapping-item">
+            <span class="mapping-label">Code Complexity</span>
+            <span class="mapping-arrow">↓</span>
+            <span class="mapping-value" id="mapping-complexity">-</span>
+            <span class="mapping-explanation" id="mapping-complexity-exp">algorithmic terms → richer harmonies</span>
+          </div>
+          <div class="mapping-item">
+            <span class="mapping-label">Repository Size</span>
+            <span class="mapping-arrow">↓</span>
+            <span class="mapping-value" id="mapping-size">-</span>
+            <span class="mapping-explanation" id="mapping-size-exp">larger content → varied patterns</span>
+          </div>
+          <div class="mapping-item">
+            <span class="mapping-label">Language Patterns</span>
+            <span class="mapping-arrow">↓</span>
+            <span class="mapping-value" id="mapping-language">-</span>
+            <span class="mapping-explanation" id="mapping-language-exp">tech keywords → specific styles</span>
+          </div>
+          <div class="mapping-item">
+            <span class="mapping-label">Mood Keywords</span>
+            <span class="mapping-arrow">↓</span>
+            <span class="mapping-value" id="mapping-mood">-</span>
+            <span class="mapping-explanation" id="mapping-mood-exp">emotional tone → intensity levels</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="song-info" id="song-info">
+        <h3 id="song-title">untitled</h3>
+        <p id="song-description">...</p>
+        <div class="tags" id="song-tags"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="floating-tags">
+    <div class="tag">open source</div>
+    <div class="tag">audio synthesis</div>
+    <div class="tag">code analysis</div>
+  </div>
+
+  <div class="marquee-container">
+    <div class="marquee">
+      <span>every function has a frequency</span>
+      <span>·</span>
+      <span>every loop has a rhythm</span>
+      <span>·</span>
+      <span>every bug has a dissonant chord</span>
+      <span>·</span>
+      <span>refactor the symphony</span>
+      <span>·</span>
+      <span>deploy the composition</span>
+      <span>·</span>
+      <span>git commit --sound</span>
+      <span>·</span>
+      <span>every function has a frequency</span>
+      <span>·</span>
+      <span>every loop has a rhythm</span>
+      <span>·</span>
+      <span>every bug has a dissonant chord</span>
+      <span>·</span>
+      <span>refactor the symphony</span>
+      <span>·</span>
+      <span>deploy the composition</span>
+      <span>·</span>
+      <span>git commit --sound</span>
+      <span>·</span>
+    </div>
+  </div>
+
+  <div class="code-sample"><pre>const f = l => l * 0.5;</pre></div>
+  <div class="code-sample"><pre>audio.createOscillator();</pre></div>
+  <div class="code-sample"><pre>map(c => chord(c))</pre></div>
+
+  <div class="player-controls">
+    <button class="control-btn" id="prev-btn">◀</button>
+    <button class="control-btn" id="play-btn">▶</button>
+    <button class="control-btn" id="next-btn">▶</button>
+  </div>
+
+  <script>
+    // ===== DIVERSE AUDIO ENGINE =====
+    let audioCtx = null;
+    let masterGain = null;
+    let limiter = null;
+    let isPlaying = false;
+    let timerID = null;
+    let audioInitialized = false;
+
+    // Song state with diverse parameters
+    let songState = {
+      tempo: 120,
+      rootNote: 60,
+      scale: 'minor',
+      scaleNotes: [0, 2, 3, 5, 7, 8, 10],
+      intensity: 0.5,
+      complexity: 0.5,
+      repoType: 'library',
+      repoName: '',
+      seed: 0,
+      beat: 0,
+      noteTime: 0,
+      // Style parameters
+      style: 'ambient',
+      melodyRange: 'mid',
+      bassStyle: 'static',
+      chordDensity: 0.5,
+      arpSpeed: 0,
+      rhythmPattern: 'straight',
+      oscTypes: ['sine'],
+      attackStyle: 'normal',
+      hasDrone: false,
+      hasTexture: false
+    };
+
+    // Store mapping data for display
+    let lastMappingData = null;
+
+    // Musical scales
+    const scales = {
+      major: { notes: [0, 2, 4, 5, 7, 9, 11], name: 'Major', mood: 'bright' },
+      minor: { notes: [0, 2, 3, 5, 7, 8, 10], name: 'Minor', mood: 'dark' },
+      harmonicMinor: { notes: [0, 2, 3, 5, 7, 8, 11], name: 'Harmonic Minor', mood: 'dramatic' },
+      dorian: { notes: [0, 2, 3, 5, 7, 9, 10], name: 'Dorian', mood: 'jazzy' },
+      phrygian: { notes: [0, 1, 3, 5, 7, 8, 10], name: 'Phrygian', mood: 'exotic' },
+      lydian: { notes: [0, 2, 4, 6, 7, 9, 11], name: 'Lydian', mood: 'dreamy' },
+      mixolydian: { notes: [0, 2, 4, 5, 7, 9, 10], name: 'Mixolydian', mood: 'bluesy' },
+      locrian: { notes: [0, 1, 3, 5, 6, 8, 10], name: 'Locrian', mood: 'tense' },
+      pentatonicMinor: { notes: [0, 3, 5, 7, 10], name: 'Pentatonic', mood: 'bluesy' },
+      blues: { notes: [0, 3, 5, 6, 7, 10], name: 'Blues', mood: 'soulful' },
+      wholeTone: { notes: [0, 2, 4, 6, 8, 10], name: 'Whole Tone', mood: 'ethereal' },
+      chromatic: { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], name: 'Chromatic', mood: 'tense' }
+    };
+
+    // Musical styles - each creates fundamentally different music
+    const styles = {
+      ambient: {
+        name: 'Ambient',
+        tempoMod: [0.8, 1.0],
+        melodyRange: ['low', 'mid'],
+        bassStyle: 'drone',
+        chordDensity: [0.2, 0.4],
+        arpSpeed: [0, 0.2],
+        rhythmPattern: ['none'],
+        oscTypes: ['sine', 'triangle'],
+        attackStyle: 'slow',
+        hasDrone: true,
+        hasTexture: true,
+        envelope: 'pad'
+      },
+      rhythmic: {
+        name: 'Rhythmic',
+        tempoMod: [1.0, 1.2],
+        melodyRange: ['mid', 'high'],
+        bassStyle: 'walking',
+        chordDensity: [0.6, 0.9],
+        arpSpeed: [0.5, 0.8],
+        rhythmPattern: ['straight', 'syncopated'],
+        oscTypes: ['square', 'sawtooth'],
+        attackStyle: 'normal',
+        hasDrone: false,
+        hasTexture: false,
+        envelope: 'pluck'
+      },
+      melodic: {
+        name: 'Melodic',
+        tempoMod: [0.9, 1.1],
+        melodyRange: ['mid', 'high', 'ultra-high'],
+        bassStyle: 'static',
+        chordDensity: [0.4, 0.6],
+        arpSpeed: [0.2, 0.4],
+        rhythmPattern: ['straight'],
+        oscTypes: ['sine', 'triangle'],
+        attackStyle: 'normal',
+        hasDrone: false,
+        hasTexture: true,
+        envelope: 'bell'
+      },
+      textural: {
+        name: 'Textural',
+        tempoMod: [0.7, 0.9],
+        melodyRange: ['low', 'mid'],
+        bassStyle: 'drone',
+        chordDensity: [0.1, 0.3],
+        arpSpeed: [0.3, 0.6],
+        rhythmPattern: ['none'],
+        oscTypes: ['sine'],
+        attackStyle: 'slow',
+        hasDrone: true,
+        hasTexture: true,
+        envelope: 'pad'
+      },
+      industrial: {
+        name: 'Industrial',
+        tempoMod: [1.1, 1.4],
+        melodyRange: ['low', 'mid'],
+        bassStyle: ['pulsing', 'walking'],
+        chordDensity: [0.5, 0.8],
+        arpSpeed: [0.6, 1.0],
+        rhythmPattern: ['driving', 'broken'],
+        oscTypes: ['sawtooth', 'square'],
+        attackStyle: 'hard',
+        hasDrone: true,
+        hasTexture: true,
+        envelope: 'glitch'
+      },
+      ethereal: {
+        name: 'Ethereal',
+        tempoMod: [0.75, 0.95],
+        melodyRange: ['mid', 'high', 'ultra-high'],
+        bassStyle: 'drone',
+        chordDensity: [0.2, 0.4],
+        arpSpeed: [0.4, 0.7],
+        rhythmPattern: ['none', 'floating'],
+        oscTypes: ['sine', 'triangle'],
+        attackStyle: 'slow',
+        hasDrone: true,
+        hasTexture: true,
+        envelope: 'pad'
+      },
+      minimal: {
+        name: 'Minimal',
+        tempoMod: [0.85, 1.05],
+        melodyRange: ['low'],
+        bassStyle: ['static', 'pulsing'],
+        chordDensity: [0.1, 0.3],
+        arpSpeed: [0, 0.2],
+        rhythmPattern: ['straight'],
+        oscTypes: ['sine'],
+        attackStyle: 'slow',
+        hasDrone: true,
+        hasTexture: false,
+        envelope: 'pad'
+      },
+      intense: {
+        name: 'Intense',
+        tempoMod: [1.2, 1.5],
+        melodyRange: ['mid', 'high'],
+        bassStyle: ['walking', 'driving'],
+        chordDensity: [0.7, 1.0],
+        arpSpeed: [0.7, 1.0],
+        rhythmPattern: ['driving', 'syncopated'],
+        oscTypes: ['sawtooth', 'square', 'triangle'],
+        attackStyle: 'hard',
+        hasDrone: true,
+        hasTexture: true,
+        envelope: 'pluck'
+      },
+      mysterious: {
+        name: 'Mysterious',
+        tempoMod: [0.8, 1.0],
+        melodyRange: ['low', 'mid'],
+        bassStyle: 'walking',
+        chordDensity: [0.3, 0.5],
+        arpSpeed: [0.3, 0.5],
+        rhythmPattern: ['broken', 'floating'],
+        oscTypes: ['sine', 'triangle'],
+        attackStyle: 'slow',
+        hasDrone: true,
+        hasTexture: true,
+        envelope: 'pad'
+      },
+      glitchy: {
+        name: 'Glitchy',
+        tempoMod: [0.9, 1.3],
+        melodyRange: ['low', 'mid', 'high'],
+        bassStyle: 'pulsing',
+        chordDensity: [0.4, 0.7],
+        arpSpeed: [0.5, 1.0],
+        rhythmPattern: ['broken', 'syncopated'],
+        oscTypes: ['square', 'sawtooth'],
+        attackStyle: 'hard',
+        hasDrone: false,
+        hasTexture: true,
+        envelope: 'glitch'
+      }
+    };
+
+    // Genre to style mapping
+    const genreStyles = {
+      game: ['intense', 'rhythmic', 'industrial'],
+      api: ['minimal', 'ambient', 'textural'],
+      library: ['ambient', 'minimal', 'textural'],
+      frontend: ['melodic', 'ethereal', 'minimal'],
+      backend: ['industrial', 'minimal', 'mysterious'],
+      ml: ['textural', 'ethereal', 'mysterious'],
+      data: ['rhythmic', 'minimal', 'industrial'],
+      mobile: ['melodic', 'ethereal', 'intense'],
+      devops: ['industrial', 'intense', 'glitchy'],
+      security: ['mysterious', 'industrial', 'glitchy'],
+      default: ['ambient', 'melodic', 'textural', 'rhythmic']
+    };
+
+    // Seeded random - makes each repo unique
+    function seededRandom(seed) {
+      const x = Math.sin(seed * 9999) * 10000;
+      return x - Math.floor(x);
+    }
+
+    function getRandom(offset = 0) {
+      return seededRandom(songState.seed + offset);
+    }
+
+    function getRandomRange(min, max, offset = 0) {
+      return min + getRandom(offset) * (max - min);
+    }
+
+    function getRandomChoice(arr, offset = 0) {
+      return arr[Math.floor(getRandom(offset) * arr.length)];
+    }
+
+    function midiToFreq(midi) {
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    function detectRepoType(name, content) {
+      const lower = (name + ' ' + content).toLowerCase();
+      
+      if (lower.match(/game|unity|play|quest|adventure|godot|unity/)) return 'game';
+      if (lower.match(/api|rest|endpoint|express/)) return 'api';
+      if (lower.match(/react|vue|angular|frontend|component|jsx/)) return 'frontend';
+      if (lower.match(/server|backend|database|orm|sql/)) return 'backend';
+      if (lower.match(/tensorflow|pytorch|neural|ml|ai|learn|model/)) return 'ml';
+      if (lower.match(/data|csv|json|analytics|chart|visual/)) return 'data';
+      if (lower.match(/ios|android|mobile|flutter|react-native/)) return 'mobile';
+      if (lower.match(/docker|kubernetes|ci|deploy|terraform/)) return 'devops';
+      if (lower.match(/crypto|security|auth|encrypt|auth/)) return 'security';
+      if (lower.match(/lib|tool|util|helper|package/)) return 'library';
+      return 'default';
+    }
+
+    function analyzeContent(content) {
+      let mood = 0.5, complexity = 0.5;
+      const lower = content.toLowerCase();
+
+      const positive = ['awesome', 'amazing', 'love', 'great', 'excellent', 'beautiful', 'fantastic', 'success'];
+      const negative = ['error', 'bug', 'fail', 'broken', 'wrong', 'terrible', 'crash', 'issue'];
+      const complex = ['algorithm', 'complex', 'advanced', 'distributed', 'concurrent', 'parallel', 'sophisticated'];
+      const simple = ['simple', 'easy', 'basic', 'minimal', 'tiny', 'lightweight', 'quick'];
+      const intense = ['fast', 'powerful', 'massive', 'huge', 'epic', 'intense', 'extreme'];
+      const gentle = ['soft', 'gentle', 'smooth', 'calm', 'peaceful', 'tranquil'];
+
+      positive.forEach(w => { if (lower.includes(w)) mood += 0.05; });
+      negative.forEach(w => { if (lower.includes(w)) mood -= 0.05; });
+      complex.forEach(w => { if (lower.includes(w)) complexity += 0.07; });
+      simple.forEach(w => { if (lower.includes(w)) complexity -= 0.07; });
+      intense.forEach(w => { if (lower.includes(w)) { mood += 0.05; complexity += 0.03; } });
+      gentle.forEach(w => { if (lower.includes(w)) { mood -= 0.03; complexity -= 0.02; } });
+
+      return {
+        mood: Math.max(0.15, Math.min(0.85, mood)),
+        complexity: Math.max(0.15, Math.min(0.85, complexity))
+      };
+    }
+
+    function initAudio() {
+      if (audioInitialized) return;
+
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        masterGain = audioCtx.createGain();
+        masterGain.gain.value = 0.15;
+
+        limiter = audioCtx.createDynamicsCompressor();
+        limiter.threshold.value = -2;
+        limiter.knee.value = 8;
+        limiter.ratio.value = 15;
+        limiter.attack.value = 0.002;
+        limiter.release.value = 0.15;
+
+        // Reverb
+        const convolver = audioCtx.createConvolver();
+        const reverbTime = 1.5;
+        const length = audioCtx.sampleRate * reverbTime;
+        const impulse = audioCtx.createBuffer(2, length, audioCtx.sampleRate);
+        
+        for (let ch = 0; ch < 2; ch++) {
+          const data = impulse.getChannelData(ch);
+          for (let i = 0; i < length; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
+          }
+        }
+        convolver.buffer = impulse;
+
+        const reverbGain = audioCtx.createGain();
+        reverbGain.gain.value = 0.1;
+
+        masterGain.connect(limiter);
+        limiter.connect(audioCtx.destination);
+        masterGain.connect(convolver);
+        convolver.connect(reverbGain);
+        reverbGain.connect(audioCtx.destination);
+
+        audioInitialized = true;
+      } catch (e) {
+        console.error('Audio init failed:', e);
+      }
+    }
+
+    function playNote(freq, time, duration, type = 'sine', vol = 0.3, attack = 0.02, release = 0.1) {
+      if (!audioCtx || !masterGain) return;
+
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = type;
+        osc.frequency.value = freq;
+
+        const actualAttack = attack * duration;
+        const actualRelease = release * duration;
+        const sustain = vol * 0.5;
+
+        gain.gain.setValueAtTime(0, time);
+        gain.gain.linearRampToValueAtTime(vol, time + actualAttack);
+        gain.gain.linearRampToValueAtTime(sustain, time + actualAttack + duration * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + duration + actualRelease);
+
+        osc.connect(gain);
+        gain.connect(masterGain);
+
+        osc.start(time);
+        osc.stop(time + duration + actualRelease + 0.02);
+      } catch (e) {}
+    }
+
+    function generateSongStyle(repoName, content) {
+      // Calculate unique seed from content
+      let seed = 0;
+      for (let i = 0; i < Math.min(800, content.length); i++) {
+        seed += content.charCodeAt(i) * (i + 1) * ((i % 10) + 1);
+      }
+      songState.seed = seed;
+
+      const analysis = analyzeContent(content);
+      
+      // Detect repo type
+      const repoType = detectRepoType(repoName, content);
+      
+      // Pick style based on repo type + content analysis
+      const possibleStyles = genreStyles[repoType] || genreStyles.default;
+      let styleName = getRandomChoice(possibleStyles, 1);
+      
+      // Modify style based on mood
+      if (analysis.mood > 0.65) {
+        styleName = getRandomChoice(['melodic', 'ethereal', 'intense'], 2);
+      } else if (analysis.mood < 0.4) {
+        styleName = getRandomChoice(['mysterious', 'textural', 'ambient'], 3);
+      }
+      
+      // Modify style based on complexity
+      if (analysis.complexity > 0.7 && getRandom(4) > 0.5) {
+        styleName = getRandomChoice(['glitchy', 'industrial', 'intense'], 5);
+      } else if (analysis.complexity < 0.35 && getRandom(5) > 0.5) {
+        styleName = 'minimal';
+      }
+
+      const style = styles[styleName];
+
+      // Determine scale based on mood
+      let scaleName = 'minor';
+      if (analysis.mood > 0.6) scaleName = getRandomChoice(['major', 'mixolydian', 'lydian'], 6);
+      else if (analysis.mood < 0.4) scaleName = getRandomChoice(['harmonicMinor', 'phrygian', 'locrian', 'blues'], 7);
+      else scaleName = getRandomChoice(['minor', 'dorian', 'phrygian', 'pentatonicMinor', 'wholeTone'], 8);
+      
+      // Sometimes use chromatic for very complex repos
+      if (analysis.complexity > 0.75 && getRandom(9) > 0.7) {
+        scaleName = 'chromatic';
+      }
+
+      const scale = scales[scaleName];
+
+      // Set all style parameters
+      const tempoBase = getRandomRange(60, 150, 10);
+      const tempoMod = getRandomRange(style.tempoMod[0], style.tempoMod[1], 11);
+      
+      songState = {
+        ...songState,
+        repoType,
+        repoName,
+        scale: scaleName,
+        scaleNotes: scale.notes,
+        rootNote: 36 + Math.floor(getRandomRange(0, 24, 12)),
+        tempo: Math.floor(tempoBase * tempoMod),
+        intensity: Math.max(0.2, Math.min(0.9, analysis.mood + getRandomRange(-0.1, 0.1, 13))),
+        complexity: Math.max(0.2, Math.min(0.9, analysis.complexity + getRandomRange(-0.1, 0.1, 14))),
+        beat: 0,
+        // Style selections
+        style: styleName,
+        melodyRange: getRandomChoice(style.melodyRange, 15),
+        bassStyle: getRandomChoice(Array.isArray(style.bassStyle) ? style.bassStyle : [style.bassStyle], 16),
+        chordDensity: getRandomRange(style.chordDensity[0], style.chordDensity[1], 17),
+        arpSpeed: getRandomRange(style.arpSpeed[0], style.arpSpeed[1], 18),
+        rhythmPattern: getRandomChoice(style.rhythmPattern, 19),
+        oscTypes: style.oscTypes,
+        attackStyle: style.attackStyle,
+        hasDrone: style.hasDrone && getRandom(20) > 0.3,
+        hasTexture: style.hasTexture && getRandom(21) > 0.3,
+        envelope: style.envelope
+      };
+
+      return {
+        type: style.name,
+        mood: scale.mood,
+        scale: scale.name,
+        tempo: songState.tempo + ' BPM',
+        style: style.name.toLowerCase(),
+        title: `${style.name.toLowerCase()}_${scaleName}_${repoName}`,
+        intensity: songState.intensity,
+        mapping: {
+          type: repoType,
+          sentiment: analysis.mood,
+          complexity: analysis.complexity,
+          size: content.length,
+          language: styleName,
+          mood: scale.mood
+        }
+      };
+    }
+
+    function scheduleMusic() {
+      if (!audioCtx || !isPlaying) return;
+
+      const secondsPerBeat = 60.0 / songState.tempo;
+      const lookahead = 0.1;
+      const currentTime = audioCtx.currentTime;
+
+      while (songState.noteTime < currentTime + lookahead) {
+        const bar = Math.floor(songState.beat / 4);
+        const beat = songState.beat % 4;
+        const time = songState.noteTime;
+        const scale = songState.scaleNotes;
+        const root = songState.rootNote;
+
+        // Get pattern variation based on beat
+        const patternOffset = Math.floor(songState.beat / 16);
+        
+        // ===== BASS =====
+        const bassType = songState.bassStyle;
+        let bassPlay = false;
+        let bassNote = root - 12;
+        
+        if (bassType === 'drone') {
+          // Drone: play on beats 1 and 3
+          if (beat === 0 || beat === 2) bassPlay = true;
+          bassNote = root - 12 + (getRandom(songState.beat * 7) > 0.7 ? 5 : 0);
+        } else if (bassType === 'walking') {
+          // Walking bass: play every beat, moving by small intervals
+          bassPlay = true;
+          const walkStep = Math.floor(songState.beat / 4) % 4;
+          if (walkStep === 0) bassNote = root - 12;
+          else if (walkStep === 1) bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 8) * 3) % scale.length];
+          else if (walkStep === 2) bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 9) * 4) % scale.length];
+          else bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 10) * 2) % scale.length];
+        } else if (bassType === 'pulsing') {
+          // Pulsing: syncopated pattern
+          bassPlay = beat % 2 === 0 || (beat === 3 && getRandom(songState.beat * 11) > 0.5);
+          bassNote = root - 12 + (getRandom(songState.beat * 12) > 0.6 ? 7 : 0);
+        } else if (bassType === 'driving') {
+          // Driving: constant eighth notes feel
+          bassPlay = true;
+          bassNote = root - 12 + (getRandom(songState.beat * 13) > 0.5 ? scale[Math.floor(getRandom(songState.beat * 14) * 4) % scale.length] : 0);
+        } else {
+          // Static: just root notes
+          bassPlay = beat === 0;
+        }
+
+        if (bassPlay && getRandom(songState.beat * 15 + 1) > 0.1) {
+          let oscType = songState.oscTypes[0] || 'sine';
+          let duration = secondsPerBeat;
+          let attack = 0.01;
+          let vol = 0.25 * songState.intensity;
+          
+          if (songState.attackStyle === 'slow') attack = 0.05;
+          if (songState.attackStyle === 'hard') attack = 0.005;
+          if (bassType === 'pulsing') { duration = secondsPerBeat * 0.8; vol *= 0.8; }
+          
+          playNote(midiToFreq(bassNote), time, duration, oscType, vol, attack, 0.15);
+        }
+
+        // ===== DRONE =====
+        if (songState.hasDrone && beat === 0 && getRandom(songState.beat * 16) > 0.4) {
+          const droneNote = root - 24 + (getRandom(songState.beat * 17) > 0.5 ? 7 : 12);
+          playNote(midiToFreq(droneNote), time, secondsPerBeat * 2, 'sine', 0.12 * songState.intensity, 0.1, 0.3);
+        }
+
+        // ===== CHORDS =====
+        if (getRandom(songState.beat * 18) < songState.chordDensity) {
+          const chordRoot = scale[bar % scale.length];
+          const chordType = Math.floor(getRandom(songState.beat * 19 + 100) * 4);
+          
+          let chordNotes = [];
+          if (chordType === 0) {
+            // Major
+            chordNotes = [chordRoot, chordRoot + 4, chordRoot + 7];
+          } else if (chordType === 1) {
+            // Minor
+            chordNotes = [chordRoot, chordRoot + 3, chordRoot + 7];
+          } else if (chordType === 2) {
+            // 7th
+            chordNotes = [chordRoot, chordRoot + (getRandom(songState.beat * 20) > 0.5 ? 4 : 3), chordRoot + 7, chordRoot + 10];
+          } else {
+            // Suspended or extended
+            chordNotes = [chordRoot, chordRoot + 5, chordRoot + 7, chordRoot + (getRandom(songState.beat * 21) > 0.5 ? 11 : 0)];
+          }
+          
+          // Spread chord notes
+          chordNotes.forEach((note, i) => {
+            const delay = i * (songState.attackStyle === 'slow' ? 30 : 15);
+            const oscType = songState.oscTypes[i % songState.oscTypes.length];
+            const noteVol = 0.08 * songState.intensity * (1 - i * 0.15);
+            playNote(midiToFreq(root + note), time + delay * 0.001, secondsPerBeat * (songState.envelope === 'pad' ? 2 : 1.2), oscType, noteVol, 0.02, 0.2);
+          });
+        }
+
+        // ===== MELODY =====
+        const range = songState.melodyRange;
+        let octave = 3;
+        if (range === 'low') octave = 2 + Math.floor(getRandom(songState.beat * 22) * 2);
+        if (range === 'mid') octave = 3 + Math.floor(getRandom(songState.beat * 23) * 2);
+        if (range === 'high') octave = 4 + Math.floor(getRandom(songState.beat * 24) * 2);
+        if (range === 'ultra-high') octave = 5 + Math.floor(getRandom(songState.beat * 25) * 2);
+
+        // Different melodic patterns based on style
+        let melodyChance = 0.4;
+        if (songState.style === 'melodic') melodyChance = 0.7;
+        if (songState.style === 'ambient') melodyChance = 0.25;
+        if (songState.style === 'rhythmic') melodyChance = 0.5;
+
+        if (getRandom(songState.beat * 26) < melodyChance) {
+          // Pick note from scale with varied patterns
+          const noteIdx = Math.floor(getRandom(songState.beat * 27 + 200) * scale.length);
+          const note = root + scale[noteIdx] + octave * 12;
+          
+          // Different rhythmic values
+          const noteLength = getRandom(songState.beat * 28) > 0.6 ? secondsPerBeat * 0.75 : 
+                            getRandom(songState.beat * 29) > 0.5 ? secondsPerBeat * 0.5 : secondsPerBeat;
+          
+          const oscType = getRandom(songState.beat * 30) > 0.4 ? 'triangle' : (songState.oscTypes[0] || 'sine');
+          let attack = 0.01;
+          if (songState.attackStyle === 'slow') attack = 0.08;
+          
+          playNote(midiToFreq(note), time, noteLength, oscType, 0.15 * songState.intensity, attack, 0.15);
+          
+          // Add harmony note occasionally
+          if (getRandom(songState.beat * 31) > 0.6 && songState.intensity > 0.5) {
+            const harmonyIdx = (noteIdx + 2) % scale.length;
+            const harmonyNote = root + scale[harmonyIdx] + octave * 12;
+            playNote(midiToFreq(harmonyNote), time, noteLength * 0.8, 'sine', 0.08 * songState.intensity, attack, 0.1);
+          }
+        }
+
+        // ===== ARPEGGIO =====
+        if (songState.arpSpeed > 0.2 && getRandom(songState.beat * 32) < songState.arpSpeed * 0.5) {
+          const arpRoot = scale[bar % scale.length];
+          const arpPattern = Math.floor(getRandom(songState.beat * 33 + 300) * 6);
+          
+          // Different arpeggio patterns
+          if (arpPattern === 0) {
+            // Up
+            for (let i = 0; i < 4; i++) {
+              const delay = i * (secondsPerBeat * 0.25);
+              playNote(midiToFreq(root + arpRoot + i * 4), time + delay, secondsPerBeat * 0.2, 'sine', 0.06, 0.01, 0.05);
+            }
+          } else if (arpPattern === 1) {
+            // Down
+            for (let i = 0; i < 4; i++) {
+              const delay = i * (secondsPerBeat * 0.25);
+              playNote(midiToFreq(root + arpRoot + 12 - i * 4), time + delay, secondsPerBeat * 0.2, 'sine', 0.06, 0.01, 0.05);
+            }
+          } else if (arpPattern === 2) {
+            // Cascade
+            for (let i = 0; i < 6; i++) {
+              const delay = i * (secondsPerBeat * 0.16);
+              playNote(midiToFreq(root + arpRoot + (i % 3) * 4 + 12), time + delay, secondsPerBeat * 0.12, 'triangle', 0.05, 0.01, 0.03);
+            }
+          } else if (arpPattern === 3) {
+            // Zigzag
+            const notes = [0, 4, 0, 7, 4, 7, 0, 4];
+            notes.forEach((offset, i) => {
+              const delay = i * (secondsPerBeat * 0.125);
+              playNote(midiToFreq(root + arpRoot + offset), time + delay, secondsPerBeat * 0.1, 'sine', 0.04, 0.01, 0.02);
+            });
+          } else {
+            // Random pattern
+            for (let i = 0; i < 4; i++) {
+              const noteOffset = scale[Math.floor(getRandom(songState.beat * 34 + i * 100) * scale.length)];
+              const delay = i * (secondsPerBeat * 0.25);
+              playNote(midiToFreq(root + arpRoot + noteOffset), time + delay, secondsPerBeat * 0.2, 'triangle', 0.05, 0.01, 0.04);
+            }
+          }
+        }
+
+        // ===== TEXTURE / GLITCH =====
+        if (songState.hasTexture && getRandom(songState.beat * 35) > 0.85) {
+          const textureType = Math.floor(getRandom(songState.beat * 36) * 4);
+          if (textureType === 0) {
+            // Quick frequency sweep
+            const startFreq = midiToFreq(root + scale[Math.floor(getRandom(songState.beat * 37) * scale.length)] + 12 * 4);
+            playNote(startFreq * 0.5, time, secondsPerBeat * 0.15, 'sawtooth', 0.08, 0.001, 0.05);
+          } else if (textureType === 1) {
+            // Noise burst
+            playNote(100 + getRandom(songState.beat * 38) * 200, time, secondsPerBeat * 0.1, 'square', 0.05, 0.001, 0.02);
+          } else if (textureType === 2) {
+            // Harmonic spark
+            const sparkNote = root + scale[Math.floor(getRandom(songState.beat * 39) * scale.length)] + 12 * 5;
+            playNote(midiToFreq(sparkNote), time, secondsPerBeat * 0.3, 'sine', 0.1, 0.02, 0.15);
+          }
+        }
+
+        songState.beat++;
+        songState.noteTime += secondsPerBeat;
+      }
+
+      timerID = setTimeout(scheduleMusic, 20);
+    }
+
+    function startPlayback() {
+      initAudio();
+      if (!audioCtx || isPlaying) return false;
+
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        isPlaying = true;
+        songState.beat = 0;
+        songState.noteTime = audioCtx.currentTime + 0.05;
+        
+        scheduleMusic();
+        return true;
+      } catch (e) {
+        console.error('Playback error:', e);
+        return false;
+      }
+    }
+
+    function stopPlayback() {
+      isPlaying = false;
+      if (timerID) {
+        clearTimeout(timerID);
+        timerID = null;
+      }
+    }
+
+    // ===== VISUALIZATION =====
+    const canvas = document.getElementById('wave-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawWaveform() {
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+      const t = Date.now() * 0.002;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const intensity = isPlaying ? (songState.intensity || 0.5) : 0.15;
+
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+
+      for (let x = 0; x < w; x++) {
+        const y = h/2 + Math.sin(x * 0.012 + t) * 30 * intensity + 
+                  Math.sin(x * 0.035 + t * 1.2) * 15 * intensity +
+                  Math.sin(x * 0.008 + t * 0.6) * 40 * intensity;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      if (isPlaying) {
+        ctx.strokeStyle = '#ff3e00';
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 0.6;
+        ctx.beginPath();
+        for (let x = 0; x < w; x++) {
+          const y = h/2 + Math.sin(x * 0.02 - t * 1.5) * 20 * intensity +
+                    Math.sin(x * 0.05 + t * 0.8) * 10;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      requestAnimationFrame(drawWaveform);
+    }
+
+    drawWaveform();
+
+    // ===== UI =====
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('repo-url');
+    const generateBtn = document.getElementById('generate-btn');
+    const playBtn = document.getElementById('play-btn');
+    const downloadBtn = document.getElementById('download-btn');
+
+    // Fetch with timeout
+    async function fetchWithTimeout(url, timeout = 8000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(id);
+        return response;
+      } catch (e) {
+        clearTimeout(id);
+        throw e;
+      }
+    }
+
+    async function fetchContent(repo) {
+      const cleanRepo = repo.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\/$/, '');
+      
+      const urls = [
+        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/main/README.md`,
+        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/master/README.md`,
+        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/main/package.json`,
+        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/master/package.json`,
+      ];
+
+      for (const url of urls) {
+        try {
+          const res = await fetchWithTimeout(url, 8000);
+          if (res.ok) return await res.text();
+        } catch (e) {
+          // Continue to next URL
+        }
+      }
+
+      return `${cleanRepo}\n\nA development repository.\n\nFeatures:\n- Fast performance\n- Modern design\n- Clean code\n- Easy to use`;
+    }
+
+    generateBtn.addEventListener('click', async () => {
+      const repo = searchInput.value.trim() || 'facebook/react';
+      const repoName = repo.split('/')[1] || repo;
+      
+      generateBtn.disabled = true;
+      document.getElementById('overlay-text').textContent = 'fetching repo...';
+      document.getElementById('overlay-detail').textContent = repo;
+      document.getElementById('visualizer-overlay').classList.remove('hidden');
+
+      const content = await fetchContent(repo);
+      
+      document.getElementById('overlay-text').textContent = 'generating...';
+      await new Promise(r => setTimeout(r, 1200));
+
+      const analysis = generateSongStyle(repoName, content);
+
+      document.getElementById('overlay-text').textContent = 'done';
+      document.getElementById('overlay-detail').textContent = '';
+      await new Promise(r => setTimeout(r, 500));
+
+      document.getElementById('overlay-text').textContent = 'press play';
+      document.getElementById('visualizer-overlay').classList.add('hidden');
+
+      // Update UI
+      const moodNames = ['dark', 'melancholic', 'neutral', 'bright', 'radiant'];
+      const energyNames = ['calm', 'relaxed', 'moderate', 'energetic', 'intense'];
+      const complexityNames = ['minimal', 'simple', 'moderate', 'intricate', 'complex'];
+
+      document.getElementById('mood-overall').textContent = moodNames[Math.floor(analysis.intensity * 4)];
+      document.getElementById('mood-overall-bar').style.width = (analysis.intensity * 100) + '%';
+      document.getElementById('mood-energy').textContent = energyNames[Math.floor(analysis.intensity * 4)];
+      document.getElementById('mood-energy-bar').style.width = (analysis.intensity * 100) + '%';
+      document.getElementById('mood-complexity').textContent = complexityNames[Math.floor(songState.complexity * 4)];
+      document.getElementById('mood-complexity-bar').style.width = (songState.complexity * 100) + '%';
+      document.getElementById('mood-scale').textContent = analysis.scale;
+
+      document.getElementById('song-title').textContent = analysis.title;
+      document.getElementById('song-description').textContent = 
+        `A ${analysis.mood} ${analysis.scale.toLowerCase()} composition at ${analysis.tempo}. ` +
+        `Generated from ${repo}. Features ${analysis.intensity > 0.6 ? 'high energy' : 'controlled'} rhythms.`;
+
+      document.getElementById('song-tags').innerHTML = 
+        `<span class="tag">${analysis.type}</span>` +
+        `<span class="tag">${analysis.scale.toLowerCase()}</span>` +
+        `<span class="tag">${analysis.style}</span>`;
+
+      // Update mapping panel
+      if (analysis.mapping) {
+        const m = analysis.mapping;
+        lastMappingData = m;
+
+        // Project Type mapping
+        const typeNames = {
+          game: 'Game Development',
+          api: 'API / Backend',
+          library: 'Library / Tool',
+          frontend: 'Frontend / UI',
+          backend: 'Backend / Server',
+          ml: 'Machine Learning',
+          data: 'Data / Analytics',
+          mobile: 'Mobile App',
+          devops: 'DevOps / Infrastructure',
+          security: 'Security / Crypto',
+          default: 'General Project'
+        };
+        document.getElementById('mapping-type').textContent = typeNames[m.type] || m.type;
+        document.getElementById('mapping-type-exp').textContent = `${typeNames[m.type] || m.type} repos → ${analysis.style} musical style`;
+
+        // Sentiment mapping
+        const sentimentValue = m.sentiment;
+        let sentimentLabel = 'Neutral';
+        if (sentimentValue > 0.6) sentimentLabel = 'Positive (+)';
+        else if (sentimentValue < 0.4) sentimentLabel = 'Negative (−)';
+        document.getElementById('mapping-sentiment').textContent = sentimentLabel;
+        document.getElementById('mapping-sentiment-exp').textContent =
+          sentimentValue > 0.6 ? 'positive words → major/lydian scales' :
+          sentimentValue < 0.4 ? 'negative words → minor/harmonic scales' :
+          'balanced tone → modal scales';
+
+        // Complexity mapping
+        const complexityValue = m.complexity;
+        let complexityLabel = 'Moderate';
+        if (complexityValue > 0.65) complexityLabel = 'Complex (high)';
+        else if (complexityValue < 0.35) complexityLabel = 'Simple (low)';
+        document.getElementById('mapping-complexity').textContent = complexityLabel;
+        document.getElementById('mapping-complexity-exp').textContent =
+          complexityValue > 0.65 ? 'algorithm terms → rich chord density' :
+          complexityValue < 0.35 ? 'simple code → minimal sparse harmony' :
+          'balanced complexity → moderate chords';
+
+        // Size mapping
+        const sizeValue = m.size;
+        let sizeLabel = 'Medium';
+        if (sizeValue > 10000) sizeLabel = 'Large (extensive)';
+        else if (sizeValue < 2000) sizeLabel = 'Small (compact)';
+        document.getElementById('mapping-size').textContent = sizeLabel;
+        document.getElementById('mapping-size-exp').textContent =
+          sizeValue > 10000 ? 'large repo → more pattern variations' :
+          sizeValue < 2000 ? 'small repo → focused melodic lines' :
+          'medium repo → balanced arrangement';
+
+        // Language/Style mapping
+        const styleNames = {
+          ambient: 'Ambient',
+          rhythmic: 'Rhythmic',
+          melodic: 'Melodic',
+          textural: 'Textural',
+          industrial: 'Industrial',
+          ethereal: 'Ethereal',
+          minimal: 'Minimal',
+          intense: 'Intense',
+          mysterious: 'Mysterious',
+          glitchy: 'Glitchy'
+        };
+        document.getElementById('mapping-language').textContent = styleNames[m.language] || m.language;
+        document.getElementById('mapping-language-exp').textContent =
+          m.type === 'game' ? 'game keywords → intense rhythmic style' :
+          m.type === 'ml' ? 'ML keywords → ethereal textural style' :
+          m.type === 'devops' ? 'devops keywords → industrial style' :
+          `${typeNames[m.type] || m.type} → ${styleNames[m.language]} arrangement`;
+
+        // Mood mapping
+        const moodLabels = {
+          bright: 'Bright & Uplifting',
+          dark: 'Dark & Serious',
+          dramatic: 'Dramatic & Intense',
+          jazzy: 'Jazzy & Soulful',
+          exotic: 'Exotic & Unusual',
+          dreamy: 'Dreamy & Atmospheric',
+          bluesy: 'Bluesy & Warm',
+          tense: 'Tense & Unsettling',
+          soulful: 'Soulful & Expressive',
+          ethereal: 'Ethereal & Spacey'
+        };
+        document.getElementById('mapping-mood').textContent = moodLabels[m.mood] || m.mood;
+        document.getElementById('mapping-mood-exp').textContent =
+          m.sentiment > 0.6 ? 'positive sentiment → bright tonal mood' :
+          m.sentiment < 0.4 ? 'negative sentiment → dark/tense mood' :
+          'neutral sentiment → balanced emotional tone';
+
+        // Show the mapping panel
+        document.getElementById('mapping-panel').style.display = 'block';
+      }
+
+      document.getElementById('analysis-section').style.display = 'block';
+      document.getElementById('download-btn').disabled = false;
+      document.getElementById('status').textContent = `generated: ${analysis.scale.toLowerCase()}`;
+
+      // Auto play
+      const success = startPlayback();
+      if (success) {
+        playBtn.textContent = '⏸';
+        playBtn.classList.add('playing');
+      }
+
+      generateBtn.disabled = false;
+    });
+
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        stopPlayback();
+        playBtn.textContent = '▶';
+        playBtn.classList.remove('playing');
+        document.getElementById('status').textContent = 'paused';
+      } else {
+        const success = startPlayback();
+        if (success) {
+          playBtn.textContent = '⏸';
+          playBtn.classList.add('playing');
+          document.getElementById('status').textContent = 'playing';
+          document.getElementById('visualizer-overlay').classList.add('hidden');
+        }
+      }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      downloadBtn.textContent = 'saved!';
+      downloadBtn.disabled = true;
+      setTimeout(() => {
+        downloadBtn.textContent = '↓ save';
+        downloadBtn.disabled = false;
+      }, 2000);
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') generateBtn.click();
+    });
+
+    // Style navigation
+    let currentStyleIndex = 0;
+    const styleList = Object.keys(styles);
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      currentStyleIndex = (currentStyleIndex + 1) % styleList.length;
+      const styleName = styleList[currentStyleIndex];
+      const style = styles[styleName];
+
+      songState.style = styleName;
+      songState.oscTypes = style.oscTypes;
+      songState.attackStyle = style.attackStyle;
+      songState.tempo = Math.floor(songState.tempo * getRandomRange(0.9, 1.1, 100 + currentStyleIndex));
+      songState.intensity = Math.max(0.2, Math.min(0.9, songState.intensity + getRandomRange(-0.1, 0.1, 200 + currentStyleIndex)));
+
+      if (isPlaying) {
+        stopPlayback();
+        setTimeout(() => startPlayback(), 50);
+      }
+
+      document.getElementById('status').textContent = `${styleName} @ ${songState.tempo}`;
+      document.getElementById('mood-scale').textContent = styleName;
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      currentStyleIndex = (currentStyleIndex - 1 + styleList.length) % styleList.length;
+      const styleName = styleList[currentStyleIndex];
+      const style = styles[styleName];
+
+      songState.style = styleName;
+      songState.oscTypes = style.oscTypes;
+      songState.attackStyle = style.attackStyle;
+      songState.tempo = Math.floor(songState.tempo * getRandomRange(0.9, 1.1, 300 + currentStyleIndex));
+      songState.intensity = Math.max(0.2, Math.min(0.9, songState.intensity + getRandomRange(-0.1, 0.1, 400 + currentStyleIndex)));
+
+      if (isPlaying) {
+        stopPlayback();
+        setTimeout(() => startPlayback(), 50);
+      }
+
+      document.getElementById('status').textContent = `${styleName} @ ${songState.tempo}`;
+      document.getElementById('mood-scale').textContent = styleName;
+    });
+
+    document.addEventListener('click', () => initAudio(), { once: true });
+  </script>
+</body>
+</html>
