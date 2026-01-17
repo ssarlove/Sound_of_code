@@ -1,6 +1,3 @@
-
-code
-preview
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1350,12 +1347,12 @@ preview
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
         masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.15;
+        masterGain.gain.value = 0.5;
 
         limiter = audioCtx.createDynamicsCompressor();
-        limiter.threshold.value = -2;
-        limiter.knee.value = 8;
-        limiter.ratio.value = 15;
+        limiter.threshold.value = 0;
+        limiter.knee.value = 6;
+        limiter.ratio.value = 12;
         limiter.attack.value = 0.002;
         limiter.release.value = 0.15;
 
@@ -1388,7 +1385,7 @@ preview
       }
     }
 
-    function playNote(freq, time, duration, type = 'sine', vol = 0.3, attack = 0.02, release = 0.1) {
+    function playNote(freq, time, duration, type = 'sine', vol = 0.4, attack = 0.02, release = 0.1) {
       if (!audioCtx || !masterGain) return;
 
       try {
@@ -1561,7 +1558,7 @@ preview
           let oscType = songState.oscTypes[0] || 'sine';
           let duration = secondsPerBeat;
           let attack = 0.01;
-          let vol = 0.25 * songState.intensity;
+          let vol = 0.4 * songState.intensity;
           
           if (songState.attackStyle === 'slow') attack = 0.05;
           if (songState.attackStyle === 'hard') attack = 0.005;
@@ -1573,7 +1570,7 @@ preview
         // ===== DRONE =====
         if (songState.hasDrone && beat === 0 && getRandom(songState.beat * 16) > 0.4) {
           const droneNote = root - 24 + (getRandom(songState.beat * 17) > 0.5 ? 7 : 12);
-          playNote(midiToFreq(droneNote), time, secondsPerBeat * 2, 'sine', 0.12 * songState.intensity, 0.1, 0.3);
+          playNote(midiToFreq(droneNote), time, secondsPerBeat * 2, 'sine', 0.25 * songState.intensity, 0.1, 0.3);
         }
 
         // ===== CHORDS =====
@@ -1601,7 +1598,7 @@ preview
           chordNotes.forEach((note, i) => {
             const delay = i * (songState.attackStyle === 'slow' ? 30 : 15);
             const oscType = songState.oscTypes[i % songState.oscTypes.length];
-            const noteVol = 0.08 * songState.intensity * (1 - i * 0.15);
+            const noteVol = 0.15 * songState.intensity * (1 - i * 0.15);
             playNote(midiToFreq(root + note), time + delay * 0.001, secondsPerBeat * (songState.envelope === 'pad' ? 2 : 1.2), oscType, noteVol, 0.02, 0.2);
           });
         }
@@ -1635,7 +1632,7 @@ preview
             let attack = 0.01;
             if (songState.attackStyle === 'slow') attack = 0.08;
             
-            playNote(midiToFreq(midiNote), time, noteLength, oscType, 0.15 * songState.intensity, attack, 0.15);
+            playNote(midiToFreq(midiNote), time, noteLength, oscType, 0.35 * songState.intensity, attack, 0.15);
             
             // Add harmony note occasionally based on character category
             if (getRandom(songState.beat * 31) > 0.6 && songState.intensity > 0.5) {
@@ -1643,7 +1640,7 @@ preview
               const scale = songState.scaleNotes;
               const degreeIndex = (SCRIPTS.findIndex(s => s.scaleDegree === (midiNote - songState.rootNote) % 12) + 2) % scale.length;
               const harmonyNote = root + scale[degreeIndex] + baseOctave * 12;
-              playNote(midiToFreq(harmonyNote), time, noteLength * 0.8, 'sine', 0.08 * songState.intensity, attack, 0.1);
+              playNote(midiToFreq(harmonyNote), time, noteLength * 0.8, 'sine', 0.15 * songState.intensity, attack, 0.1);
             }
             
             // Advance content position after playing a note
@@ -2086,7 +2083,20 @@ preview
       document.getElementById('mood-scale').textContent = styleName;
     });
 
-    document.addEventListener('click', () => initAudio(), { once: true });
+    document.addEventListener('touchstart', function mobileInit() {
+      initAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      document.removeEventListener('touchstart', mobileInit);
+    }, { once: true });
+    
+    document.addEventListener('click', function desktopInit() {
+      initAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      document.removeEventListener('click', desktopInit);
+    }, { once: true });
   </script>
 </body>
-</html>
