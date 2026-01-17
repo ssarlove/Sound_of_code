@@ -1,3 +1,6 @@
+
+code
+preview
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +26,12 @@
       --accent-2: #00ff88;
       --accent-3: #ff00ff;
       --border: #333;
+      --script-latin: #4ec9b0;
+      --script-numbers: #b5cea8;
+      --script-brackets: #ffd700;
+      --script-operators: #ce9178;
+      --script-symbols: #d16969;
+      --script-whitespace: #808080;
     }
 
     body {
@@ -315,6 +324,117 @@
       25%, 75% { opacity: 0.3; }
     }
 
+    /* Script Monitor Panel - Scripts sorted alphabetically by name */
+    .script-monitor {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 2px dashed var(--border);
+      background: rgba(255, 62, 0, 0.03);
+    }
+
+    .script-header {
+      font-family: 'Unica One', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .script-header::before {
+      content: 'A-Z';
+      font-size: 0.6rem;
+      background: var(--border);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+    }
+
+    .script-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .script-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--border);
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      opacity: 0.4;
+    }
+
+    .script-item.active {
+      opacity: 1;
+      transform: scale(1.02);
+      box-shadow: 0 0 15px currentColor;
+    }
+
+    .script-item .script-icon {
+      font-size: 1.2rem;
+      width: 28px;
+      text-align: center;
+    }
+
+    .script-item .script-info {
+      flex: 1;
+    }
+
+    .script-item .script-name {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    .script-item .script-chars {
+      font-size: 0.55rem;
+      color: #888;
+      font-family: monospace;
+      margin-top: 0.2rem;
+    }
+
+    .script-item .script-note {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      padding: 0.15rem 0.4rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    /* Script Colors - Alphabetical Order */
+    .script-item[data-script="brackets"] {
+      color: var(--script-brackets);
+      border-left: 3px solid var(--script-brackets);
+    }
+    .script-item[data-script="latin"] {
+      color: var(--script-latin);
+      border-left: 3px solid var(--script-latin);
+    }
+    .script-item[data-script="numbers"] {
+      color: var(--script-numbers);
+      border-left: 3px solid var(--script-numbers);
+    }
+    .script-item[data-script="operators"] {
+      color: var(--script-operators);
+      border-left: 3px solid var(--script-operators);
+    }
+    .script-item[data-script="symbols"] {
+      color: var(--script-symbols);
+      border-left: 3px solid var(--script-symbols);
+    }
+    .script-item[data-script="whitespace"] {
+      color: var(--script-whitespace);
+      border-left: 3px solid var(--script-whitespace);
+    }
+
     .analysis-section {
       margin: 3rem 0;
     }
@@ -599,7 +719,7 @@
       background: var(--text);
     }
 
-    ::selection {
+    @selection {
       background: var(--accent);
       color: var(--bg);
     }
@@ -623,6 +743,10 @@
 
       .floating-tags {
         display: none;
+      }
+
+      .script-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
@@ -676,6 +800,14 @@
           <span id="overlay-text">press listen to begin</span>
           <div class="detail" id="overlay-detail">or try facebook/react as demo</div>
         </div>
+      </div>
+    </div>
+
+    <!-- Script Monitor Panel - Scripts sorted alphabetically by name -->
+    <div class="script-monitor">
+      <div class="script-header">character → script mapping (alphabetical)</div>
+      <div class="script-grid" id="script-grid">
+        <!-- Scripts will be rendered here in alphabetical order -->
       </div>
     </div>
 
@@ -813,6 +945,10 @@
     let timerID = null;
     let audioInitialized = false;
 
+    // Code content for character-based note mapping
+    let currentContent = '';
+    let contentPosition = 0;
+
     // Song state with diverse parameters
     let songState = {
       tempo: 120,
@@ -839,8 +975,104 @@
       hasTexture: false
     };
 
+    // Script categories - sorted alphabetically by name for display
+    // Each category maps to a specific scale degree for note mapping
+    const SCRIPTS = [
+      { name: 'Brackets', icon: '{}[]()', chars: '{}[]()<>', scaleDegree: 0, octave: 4, noteLabel: 'C4' },
+      { name: 'Latin', icon: 'Aa', chars: 'a-zA-Z', scaleDegree: 2, octave: 4, noteLabel: 'D4' },
+      { name: 'Numbers', icon: '123', chars: '0-9', scaleDegree: 4, octave: 4, noteLabel: 'E4' },
+      { name: 'Operators', icon: '+-*/', chars: '+-*/%=<>&|', scaleDegree: 5, octave: 4, noteLabel: 'F4' },
+      { name: 'Symbols', icon: '!?@', chars: '.,;:!?@#$^\'"`~', scaleDegree: 1, octave: 5, noteLabel: 'D5' },
+      { name: 'Whitespace', icon: '___', chars: ' \\t\\n', scaleDegree: null, octave: null, noteLabel: 'Rest' }
+    ];
+
     // Store mapping data for display
     let lastMappingData = null;
+
+    // Classify a character into its script category
+    function getScriptCategory(char) {
+      for (const script of SCRIPTS) {
+        // Check if char matches the pattern
+        if (script.name === 'Whitespace') {
+          if (char === ' ' || char === '\t' || char === '\n' || char === '\r') {
+            return script;
+          }
+        } else if (script.name === 'Brackets') {
+          if ('{}[]()<>'.includes(char)) {
+            return script;
+          }
+        } else if (script.name === 'Numbers') {
+          if ('0123456789'.includes(char)) {
+            return script;
+          }
+        } else if (script.name === 'Operators') {
+          if ('+-*/%=<>&|'.includes(char)) {
+            return script;
+          }
+        } else if (script.name === 'Symbols') {
+          if ('.,;:!?@#$^\'"`~'.includes(char)) {
+            return script;
+          }
+        } else if (script.name === 'Latin') {
+          if (('a' <= char && char <= 'z') || ('A' <= char && char <= 'Z')) {
+            return script;
+          }
+        }
+      }
+      return null;
+    }
+
+    // Get MIDI note for a character based on script category and current scale
+    function getNoteForCharacter(char, beatPosition = 0) {
+      const script = getScriptCategory(char);
+      
+      if (!script || script.scaleDegree === null) {
+        return null; // Rest for whitespace
+      }
+
+      const scale = songState.scaleNotes;
+      const root = songState.rootNote;
+      
+      // Use the script's scale degree to pick a note from the scale
+      const degreeIndex = script.scaleDegree % scale.length;
+      const noteOffset = scale[degreeIndex];
+      
+      // Add octave variation based on position in content
+      const octaveOffset = Math.floor(beatPosition / 100) % 2;
+      const octave = script.octave + octaveOffset;
+      
+      // Calculate final MIDI note
+      const midiNote = root + noteOffset + (octave - 3) * 12;
+      
+      return midiNote;
+    }
+
+    // Get active script for highlighting based on current content position
+    function getActiveScriptAtPosition(pos) {
+      if (!currentContent || pos >= currentContent.length) {
+        return null;
+      }
+      const char = currentContent[pos];
+      return getScriptCategory(char);
+    }
+
+    // Highlight active script based on current content position
+    function highlightActiveScript() {
+      if (!isPlaying || !currentContent) return;
+      
+      // Get character at current position for visual feedback
+      const char = currentContent[contentPosition % currentContent.length];
+      const script = getScriptCategory(char);
+      
+      if (script) {
+        document.querySelectorAll('.script-item').forEach(item => {
+          item.classList.remove('active');
+          if (item.dataset.script === script.name.toLowerCase()) {
+            item.classList.add('active');
+          }
+        });
+      }
+    }
 
     // Musical scales
     const scales = {
@@ -1016,6 +1248,38 @@
       security: ['mysterious', 'industrial', 'glitchy'],
       default: ['ambient', 'melodic', 'textural', 'rhythmic']
     };
+
+    // Render script grid in alphabetical order
+    function renderScriptGrid() {
+      const grid = document.getElementById('script-grid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+
+      // SCRIPTS array is already sorted alphabetically by name
+      // Order: Brackets, Latin, Numbers, Operators, Symbols, Whitespace
+      SCRIPTS.forEach(script => {
+        const item = document.createElement('div');
+        item.className = 'script-item';
+        item.dataset.script = script.name.toLowerCase();
+        item.innerHTML = `
+          <div class="script-icon">${script.icon}</div>
+          <div class="script-info">
+            <div class="script-name">${script.name}</div>
+            <div class="script-chars">${script.chars}</div>
+          </div>
+          <div class="script-note">${script.noteLabel}</div>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    // Clear script highlights when stopping
+    function clearScriptHighlight() {
+      document.querySelectorAll('.script-item').forEach(item => {
+        item.classList.remove('active');
+      });
+    }
 
     // Seeded random - makes each repo unique
     function seededRandom(seed) {
@@ -1263,6 +1527,7 @@
         const patternOffset = Math.floor(songState.beat / 16);
         
         // ===== BASS =====
+        // Bass provides the harmonic foundation - keep it musical and stable
         const bassType = songState.bassStyle;
         let bassPlay = false;
         let bassNote = root - 12;
@@ -1312,6 +1577,7 @@
         }
 
         // ===== CHORDS =====
+        // Chords provide harmonic texture - keep them musical
         if (getRandom(songState.beat * 18) < songState.chordDensity) {
           const chordRoot = scale[bar % scale.length];
           const chordType = Math.floor(getRandom(songState.beat * 19 + 100) * 4);
@@ -1340,13 +1606,14 @@
           });
         }
 
-        // ===== MELODY =====
+        // ===== MELODY - CHARACTER DRIVEN =====
+        // Melody is driven by actual code characters - each character maps to a specific note
         const range = songState.melodyRange;
-        let octave = 3;
-        if (range === 'low') octave = 2 + Math.floor(getRandom(songState.beat * 22) * 2);
-        if (range === 'mid') octave = 3 + Math.floor(getRandom(songState.beat * 23) * 2);
-        if (range === 'high') octave = 4 + Math.floor(getRandom(songState.beat * 24) * 2);
-        if (range === 'ultra-high') octave = 5 + Math.floor(getRandom(songState.beat * 25) * 2);
+        let baseOctave = 4;
+        if (range === 'low') baseOctave = 3;
+        if (range === 'mid') baseOctave = 4;
+        if (range === 'high') baseOctave = 5;
+        if (range === 'ultra-high') baseOctave = 5;
 
         // Different melodic patterns based on style
         let melodyChance = 0.4;
@@ -1355,26 +1622,36 @@
         if (songState.style === 'rhythmic') melodyChance = 0.5;
 
         if (getRandom(songState.beat * 26) < melodyChance) {
-          // Pick note from scale with varied patterns
-          const noteIdx = Math.floor(getRandom(songState.beat * 27 + 200) * scale.length);
-          const note = root + scale[noteIdx] + octave * 12;
+          // Get character at current position
+          const char = currentContent[contentPosition % currentContent.length];
+          const midiNote = getNoteForCharacter(char, contentPosition);
           
-          // Different rhythmic values
-          const noteLength = getRandom(songState.beat * 28) > 0.6 ? secondsPerBeat * 0.75 : 
-                            getRandom(songState.beat * 29) > 0.5 ? secondsPerBeat * 0.5 : secondsPerBeat;
-          
-          const oscType = getRandom(songState.beat * 30) > 0.4 ? 'triangle' : (songState.oscTypes[0] || 'sine');
-          let attack = 0.01;
-          if (songState.attackStyle === 'slow') attack = 0.08;
-          
-          playNote(midiToFreq(note), time, noteLength, oscType, 0.15 * songState.intensity, attack, 0.15);
-          
-          // Add harmony note occasionally
-          if (getRandom(songState.beat * 31) > 0.6 && songState.intensity > 0.5) {
-            const harmonyIdx = (noteIdx + 2) % scale.length;
-            const harmonyNote = root + scale[harmonyIdx] + octave * 12;
-            playNote(midiToFreq(harmonyNote), time, noteLength * 0.8, 'sine', 0.08 * songState.intensity, attack, 0.1);
+          if (midiNote !== null) {
+            // Calculate note length based on style
+            const noteLength = getRandom(songState.beat * 28) > 0.6 ? secondsPerBeat * 0.75 : 
+                              getRandom(songState.beat * 29) > 0.5 ? secondsPerBeat * 0.5 : secondsPerBeat;
+            
+            const oscType = getRandom(songState.beat * 30) > 0.4 ? 'triangle' : (songState.oscTypes[0] || 'sine');
+            let attack = 0.01;
+            if (songState.attackStyle === 'slow') attack = 0.08;
+            
+            playNote(midiToFreq(midiNote), time, noteLength, oscType, 0.15 * songState.intensity, attack, 0.15);
+            
+            // Add harmony note occasionally based on character category
+            if (getRandom(songState.beat * 31) > 0.6 && songState.intensity > 0.5) {
+              // Find next scale degree for harmony
+              const scale = songState.scaleNotes;
+              const degreeIndex = (SCRIPTS.findIndex(s => s.scaleDegree === (midiNote - songState.rootNote) % 12) + 2) % scale.length;
+              const harmonyNote = root + scale[degreeIndex] + baseOctave * 12;
+              playNote(midiToFreq(harmonyNote), time, noteLength * 0.8, 'sine', 0.08 * songState.intensity, attack, 0.1);
+            }
+            
+            // Advance content position after playing a note
+            contentPosition++;
           }
+        } else {
+          // Even when not playing melody, advance position to match code rhythm
+          contentPosition++;
         }
 
         // ===== ARPEGGIO =====
@@ -1435,6 +1712,11 @@
           }
         }
 
+        // Update script monitor visualization based on current character
+        if (songState.beat % 2 === 0) {
+          highlightActiveScript();
+        }
+
         songState.beat++;
         songState.noteTime += secondsPerBeat;
       }
@@ -1452,6 +1734,7 @@
         isPlaying = true;
         songState.beat = 0;
         songState.noteTime = audioCtx.currentTime + 0.05;
+        contentPosition = 0; // Reset content position for character-based playback
         
         scheduleMusic();
         return true;
@@ -1467,6 +1750,7 @@
         clearTimeout(timerID);
         timerID = null;
       }
+      clearScriptHighlight();
     }
 
     // ===== VISUALIZATION =====
@@ -1529,6 +1813,9 @@
     const playBtn = document.getElementById('play-btn');
     const downloadBtn = document.getElementById('download-btn');
 
+    // Initialize script grid on load - scripts sorted alphabetically
+    renderScriptGrid();
+
     // Fetch with timeout
     async function fetchWithTimeout(url, timeout = 8000) {
       const controller = new AbortController();
@@ -1576,6 +1863,7 @@
       document.getElementById('visualizer-overlay').classList.remove('hidden');
 
       const content = await fetchContent(repo);
+      currentContent = content; // Store content for character-based note mapping
       
       document.getElementById('overlay-text').textContent = 'generating...';
       await new Promise(r => setTimeout(r, 1200));
