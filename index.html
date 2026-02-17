@@ -7,6 +7,22 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="The Sound of Code - Convert Your GitHub Repo to Music" />
+  <meta property="og:description" content="Every repository has a unique sound. Drop a GitHub URL and hear what your code sounds like. Each script plays in alphabetical order." />
+  <meta property="og:url" content="https://soundofcode.xyz" />
+  <meta property="og:image" content="https://soundofcode.xyz/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:type" content="website" />
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Sound of Code - Convert Your GitHub Repo to Music" />
+  <meta name="twitter:description" content="Every repository has a unique sound. Drop a GitHub URL and hear what your code sounds like." />
+  <meta name="twitter:image" content="https://soundofcode.xyz/og-image.png" />
+  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unica+One&display=swap');
 
@@ -87,7 +103,7 @@
     }
 
     .hero {
-      min-height: 65vh;
+      min-height: 35vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -96,7 +112,7 @@
 
     .hero h1 {
       font-family: 'Unica One', sans-serif;
-      font-size: clamp(3rem, 12vw, 10rem);
+      font-size: clamp(2rem, 8vw, 6rem);
       line-height: 0.85;
       text-transform: uppercase;
       letter-spacing: -0.02em;
@@ -248,7 +264,7 @@
     }
 
     .visualizer-container {
-      margin: 3rem 0;
+      margin: 2rem 0;
       position: relative;
     }
 
@@ -264,7 +280,7 @@
 
     .visualizer {
       width: 100%;
-      height: 200px;
+      height: 150px;
       background: repeating-linear-gradient(
         0deg,
         transparent,
@@ -321,7 +337,137 @@
       25%, 75% { opacity: 0.3; }
     }
 
-    /* Script Monitor Panel - Scripts sorted alphabetically by name */
+    /* Repository Files Section */
+    .repo-files-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 2px dashed var(--border);
+      background: rgba(255, 62, 0, 0.03);
+    }
+
+    .repo-files-header {
+      font-family: 'Unica One', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .repo-files-header .count {
+      font-size: 0.7rem;
+      color: #666;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .download-all-btn {
+      background: var(--accent-2);
+      color: var(--bg);
+      border: none;
+      font-family: 'Unica One', sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .download-all-btn:hover {
+      background: var(--accent);
+      transform: translate(-2px, -2px);
+      box-shadow: 2px 2px 0 var(--text);
+    }
+
+    .download-all-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .files-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 0.75rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--border);
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .file-item:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .file-item.playing {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 10px var(--accent-2);
+    }
+
+    .file-item .file-icon {
+      font-size: 1.2rem;
+      width: 28px;
+      text-align: center;
+    }
+
+    .file-item .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .file-item .file-name {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-item .file-size {
+      font-size: 0.55rem;
+      color: #888;
+      font-family: monospace;
+      margin-top: 0.2rem;
+    }
+
+    .file-item .file-download {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      padding: 0.15rem 0.4rem;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .file-item:hover .file-download {
+      opacity: 1;
+    }
+
+    .loading-files {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+      font-size: 0.8rem;
+    }
+
+    /* Script Monitor Panel */
     .script-monitor {
       margin: 2rem 0;
       padding: 1.5rem;
@@ -406,7 +552,7 @@
       text-align: center;
     }
 
-    /* Script Colors - Alphabetical Order */
+    /* Script Colors */
     .script-item[data-script="brackets"] {
       color: var(--script-brackets);
       border-left: 3px solid var(--script-brackets);
@@ -433,14 +579,14 @@
     }
 
     .analysis-section {
-      margin: 3rem 0;
+      margin: 2rem 0;
     }
 
     .analysis-header {
       font-family: 'Unica One', sans-serif;
-      font-size: 2rem;
+      font-size: 1.5rem;
       text-transform: uppercase;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       display: inline-block;
       background: var(--text);
       color: var(--bg);
@@ -457,17 +603,17 @@
 
     .mood-card {
       background: var(--bg);
-      padding: 2rem 1.5rem;
+      padding: 1.5rem 1rem;
       text-align: center;
     }
 
     .mood-card .icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .mood-card .label {
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: #666;
@@ -476,14 +622,14 @@
 
     .mood-card .value {
       font-family: 'Unica One', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1rem;
       text-transform: uppercase;
     }
 
     .mood-card .bar {
-      height: 4px;
+      height: 3px;
       background: var(--border);
-      margin-top: 1rem;
+      margin-top: 0.75rem;
       position: relative;
     }
 
@@ -497,98 +643,39 @@
     }
 
     .song-info {
-      margin: 2rem 0;
-      padding: 2rem;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
       background: var(--border);
       border: 2px solid var(--text);
     }
 
     .song-info h3 {
       font-family: 'Unica One', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       text-transform: uppercase;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .song-info p {
-      font-size: 0.9rem;
-      line-height: 1.8;
-      margin-bottom: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
     }
 
     .song-info .tags {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
 
     .song-info .tag {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 0.3rem 0.8rem;
+      padding: 0.25rem 0.6rem;
       background: var(--bg);
       border: 1px solid var(--border);
-    }
-
-    .mapping-panel {
-      margin: 2rem 0;
-      padding: 2rem;
-      border: 2px dashed var(--border);
-      background: rgba(255, 62, 0, 0.03);
-    }
-
-    .mapping-header {
-      font-family: 'Unica One', sans-serif;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .mapping-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .mapping-item {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .mapping-label {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #666;
-    }
-
-    .mapping-arrow {
-      color: var(--accent-2);
-      font-size: 1rem;
-      margin: 0.25rem 0;
-    }
-
-    .mapping-value {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--text);
-      background: var(--border);
-      padding: 0.5rem 0.75rem;
-      border-left: 3px solid var(--accent);
-    }
-
-    .mapping-explanation {
-      font-size: 0.7rem;
-      color: #888;
-      margin-top: 0.25rem;
-      line-height: 1.4;
     }
 
     .floating-tags {
@@ -735,7 +822,7 @@
       }
 
       .hero h1 {
-        font-size: clamp(2.5rem, 15vw, 5rem);
+        font-size: clamp(2rem, 15vw, 4rem);
       }
 
       .floating-tags {
@@ -744,6 +831,10 @@
 
       .script-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .files-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -777,7 +868,7 @@
       <p>Every Repo has a beat.</p>
       <p>we don't just read your code. we listen to it.</p>
       <div class="quote">"code is poetry. poetry has sound."</div>
-      <p>drop a github url and hear what your project sounds like.</p>
+      <p>drop a github url and hear what your project sounds like. Each script plays in alphabetical order.</p>
     </div>
 
     <div class="input-section">
@@ -785,8 +876,8 @@
         <label>github repository</label>
         <input type="text" placeholder="username/repo" id="repo-url" value="facebook/react">
       </div>
-      <button class="big-button" id="generate-btn">listen</button>
-      <button class="download-btn" id="download-btn" disabled>↓ save</button>
+      <button class="big-button" id="generate-btn">fetch</button>
+      <button class="download-btn" id="save-btn" disabled>↓ save all</button>
     </div>
 
     <div class="visualizer-container">
@@ -794,22 +885,33 @@
       <div class="visualizer">
         <canvas id="wave-canvas"></canvas>
         <div class="overlay" id="visualizer-overlay">
-          <span id="overlay-text">press listen to begin</span>
-          <div class="detail" id="overlay-detail">or try facebook/react as demo</div>
+          <span id="overlay-text">enter a repo to begin</span>
+          <div class="detail" id="overlay-detail">scripts play in alphabetical order</div>
         </div>
       </div>
     </div>
 
-    <!-- Script Monitor Panel - Scripts sorted alphabetically by name -->
+    <!-- Repository Files Section -->
+    <div class="repo-files-section" id="repo-files-section" style="display: none;">
+      <div class="repo-files-header">
+        <span>scripts (alphabetical)</span>
+        <span class="count" id="files-count"></span>
+        <button class="download-all-btn" id="download-all-btn" disabled>↓ download all</button>
+      </div>
+      <div class="files-grid" id="files-grid">
+        <div class="loading-files" id="loading-files">loading repository...</div>
+      </div>
+    </div>
+
+    <!-- Script Monitor Panel -->
     <div class="script-monitor">
       <div class="script-header">character → script mapping (alphabetical)</div>
       <div class="script-grid" id="script-grid">
-        <!-- Scripts will be rendered here in alphabetical order -->
       </div>
     </div>
 
     <div class="analysis-section" id="analysis-section" style="display: none;">
-      <h2 class="analysis-header">what we heard</h2>
+      <h2 class="analysis-header">current track</h2>
 
       <div class="mood-display">
         <div class="mood-card">
@@ -838,51 +940,9 @@
         </div>
       </div>
 
-      <div class="mapping-panel" id="mapping-panel" style="display: none;">
-        <div class="mapping-header">code → sound mapping</div>
-        <div class="mapping-grid">
-          <div class="mapping-item">
-            <span class="mapping-label">Project Type</span>
-            <span class="mapping-arrow">↓</span>
-            <span class="mapping-value" id="mapping-type">-</span>
-            <span class="mapping-explanation" id="mapping-type-exp">game repos → intense/rhythmic style</span>
-          </div>
-          <div class="mapping-item">
-            <span class="mapping-label">Content Sentiment</span>
-            <span class="mapping-arrow">↓</span>
-            <span class="mapping-value" id="mapping-sentiment">-</span>
-            <span class="mapping-explanation" id="mapping-sentiment-exp">positive words → brighter scales</span>
-          </div>
-          <div class="mapping-item">
-            <span class="mapping-label">Code Complexity</span>
-            <span class="mapping-arrow">↓</span>
-            <span class="mapping-value" id="mapping-complexity">-</span>
-            <span class="mapping-explanation" id="mapping-complexity-exp">algorithmic terms → richer harmonies</span>
-          </div>
-          <div class="mapping-item">
-            <span class="mapping-label">Repository Size</span>
-            <span class="mapping-arrow">↓</span>
-            <span class="mapping-value" id="mapping-size">-</span>
-            <span class="mapping-explanation" id="mapping-size-exp">larger content → varied patterns</span>
-          </div>
-          <div class="mapping-item">
-            <span class="mapping-label">Language Patterns</span>
-            <span class="mapping-arrow">↓</span>
-            <span class="mapping-value" id="mapping-language">-</span>
-            <span class="mapping-explanation" id="mapping-language-exp">tech keywords → specific styles</span>
-          </div>
-          <div class="mapping-item">
-            <span class="mapping-label">Mood Keywords</span>
-            <span class="mapping-arrow">↓</span>
-            <span class="mapping-value" id="mapping-mood">-</span>
-            <span class="mapping-explanation" id="mapping-mood-exp">emotional tone → intensity levels</span>
-          </div>
-        </div>
-      </div>
-
       <div class="song-info" id="song-info">
-        <h3 id="song-title">untitled</h3>
-        <p id="song-description">...</p>
+        <h3 id="song-title">no track selected</h3>
+        <p id="song-description">click on a script above to hear it, or download all as one track</p>
         <div class="tags" id="song-tags"></div>
       </div>
     </div>
@@ -900,7 +960,7 @@
       <span>·</span>
       <span>every loop has a rhythm</span>
       <span>·</span>
-      <span>every bug has a dissonant chord</span>
+      <span>scripts play alphabetically</span>
       <span>·</span>
       <span>refactor the symphony</span>
       <span>·</span>
@@ -912,7 +972,7 @@
       <span>·</span>
       <span>every loop has a rhythm</span>
       <span>·</span>
-      <span>every bug has a dissonant chord</span>
+      <span>scripts play alphabetically</span>
       <span>·</span>
       <span>refactor the symphony</span>
       <span>·</span>
@@ -934,7 +994,7 @@
   </div>
 
   <script>
-    // ===== DIVERSE AUDIO ENGINE =====
+    // ===== AUDIO ENGINE =====
     let audioCtx = null;
     let masterGain = null;
     let limiter = null;
@@ -942,11 +1002,17 @@
     let timerID = null;
     let audioInitialized = false;
 
-    // Code content for character-based note mapping
+    // Current file content for character-based note mapping
     let currentContent = '';
     let contentPosition = 0;
+    
+    // Repository data
+    let repoFiles = [];
+    let currentFileIndex = -1;
+    let currentRepoName = '';
+    let currentAnalysis = null;
 
-    // Song state with diverse parameters
+    // Song state
     let songState = {
       tempo: 120,
       rootNote: 60,
@@ -959,7 +1025,6 @@
       seed: 0,
       beat: 0,
       noteTime: 0,
-      // Style parameters
       style: 'ambient',
       melodyRange: 'mid',
       bassStyle: 'static',
@@ -969,11 +1034,13 @@
       oscTypes: ['sine'],
       attackStyle: 'normal',
       hasDrone: false,
-      hasTexture: false
+      hasTexture: false,
+      songDuration: 0,
+      startTime: 0,
+      fadeOutStart: 0
     };
 
-    // Script categories - sorted alphabetically by name for display
-    // Each category maps to a specific scale degree for note mapping
+    // Script categories - sorted alphabetically
     const SCRIPTS = [
       { name: 'Brackets', icon: '{}[]()', chars: '{}[]()<>', scaleDegree: 0, octave: 4, noteLabel: 'C4' },
       { name: 'Latin', icon: 'Aa', chars: 'a-zA-Z', scaleDegree: 2, octave: 4, noteLabel: 'D4' },
@@ -983,81 +1050,63 @@
       { name: 'Whitespace', icon: '___', chars: ' \\t\\n', scaleDegree: null, octave: null, noteLabel: 'Rest' }
     ];
 
-    // Store mapping data for display
-    let lastMappingData = null;
+    // File type icons
+    const FILE_ICONS = {
+      js: '📜', jsx: '⚛️', ts: '📘', tsx: '⚛️', py: '🐍', rb: '💎',
+      java: '☕', go: '🐹', rs: '🦀', cpp: '⚙️', c: '⚙️', h: '📄',
+      css: '🎨', scss: '🎨', html: '🌐', json: '📋', md: '📝',
+      yml: '⚙️', yaml: '⚙️', xml: '📰', sh: '🖥️', sql: '🗃️',
+      vue: '💚', svelte: '🔥', php: '🐘', swift: '🍎', kt: '🤖',
+      default: '📄'
+    };
 
-    // Classify a character into its script category
+    function getFileIcon(filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      return FILE_ICONS[ext] || FILE_ICONS.default;
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // Character classification
     function getScriptCategory(char) {
       for (const script of SCRIPTS) {
-        // Check if char matches the pattern
         if (script.name === 'Whitespace') {
-          if (char === ' ' || char === '\t' || char === '\n' || char === '\r') {
-            return script;
-          }
+          if (char === ' ' || char === '\t' || char === '\n' || char === '\r') return script;
         } else if (script.name === 'Brackets') {
-          if ('{}[]()<>'.includes(char)) {
-            return script;
-          }
+          if ('{}[]()<>'.includes(char)) return script;
         } else if (script.name === 'Numbers') {
-          if ('0123456789'.includes(char)) {
-            return script;
-          }
+          if ('0123456789'.includes(char)) return script;
         } else if (script.name === 'Operators') {
-          if ('+-*/%=<>&|'.includes(char)) {
-            return script;
-          }
+          if ('+-*/%=<>&|'.includes(char)) return script;
         } else if (script.name === 'Symbols') {
-          if ('.,;:!?@#$^\'"`~'.includes(char)) {
-            return script;
-          }
+          if ('.,;:!?@#$^\'"`~'.includes(char)) return script;
         } else if (script.name === 'Latin') {
-          if (('a' <= char && char <= 'z') || ('A' <= char && char <= 'Z')) {
-            return script;
-          }
+          if (('a' <= char && char <= 'z') || ('A' <= char && char <= 'Z')) return script;
         }
       }
       return null;
     }
 
-    // Get MIDI note for a character based on script category and current scale
     function getNoteForCharacter(char, beatPosition = 0) {
       const script = getScriptCategory(char);
-      
-      if (!script || script.scaleDegree === null) {
-        return null; // Rest for whitespace
-      }
+      if (!script || script.scaleDegree === null) return null;
 
       const scale = songState.scaleNotes;
       const root = songState.rootNote;
-      
-      // Use the script's scale degree to pick a note from the scale
       const degreeIndex = script.scaleDegree % scale.length;
       const noteOffset = scale[degreeIndex];
-      
-      // Add octave variation based on position in content
       const octaveOffset = Math.floor(beatPosition / 100) % 2;
       const octave = script.octave + octaveOffset;
-      
-      // Calculate final MIDI note
       const midiNote = root + noteOffset + (octave - 3) * 12;
-      
       return midiNote;
     }
 
-    // Get active script for highlighting based on current content position
-    function getActiveScriptAtPosition(pos) {
-      if (!currentContent || pos >= currentContent.length) {
-        return null;
-      }
-      const char = currentContent[pos];
-      return getScriptCategory(char);
-    }
-
-    // Highlight active script based on current content position
     function highlightActiveScript() {
       if (!isPlaying || !currentContent) return;
-      
-      // Get character at current position for visual feedback
       const char = currentContent[contentPosition % currentContent.length];
       const script = getScriptCategory(char);
       
@@ -1080,205 +1129,24 @@
       phrygian: { notes: [0, 1, 3, 5, 7, 8, 10], name: 'Phrygian', mood: 'exotic' },
       lydian: { notes: [0, 2, 4, 6, 7, 9, 11], name: 'Lydian', mood: 'dreamy' },
       mixolydian: { notes: [0, 2, 4, 5, 7, 9, 10], name: 'Mixolydian', mood: 'bluesy' },
-      locrian: { notes: [0, 1, 3, 5, 6, 8, 10], name: 'Locrian', mood: 'tense' },
       pentatonicMinor: { notes: [0, 3, 5, 7, 10], name: 'Pentatonic', mood: 'bluesy' },
       blues: { notes: [0, 3, 5, 6, 7, 10], name: 'Blues', mood: 'soulful' },
-      wholeTone: { notes: [0, 2, 4, 6, 8, 10], name: 'Whole Tone', mood: 'ethereal' },
-      chromatic: { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], name: 'Chromatic', mood: 'tense' }
+      wholeTone: { notes: [0, 2, 4, 6, 8, 10], name: 'Whole Tone', mood: 'ethereal' }
     };
 
-    // Musical styles - each creates fundamentally different music
+    // Musical styles
     const styles = {
-      ambient: {
-        name: 'Ambient',
-        tempoMod: [0.8, 1.0],
-        melodyRange: ['low', 'mid'],
-        bassStyle: 'drone',
-        chordDensity: [0.2, 0.4],
-        arpSpeed: [0, 0.2],
-        rhythmPattern: ['none'],
-        oscTypes: ['sine', 'triangle'],
-        attackStyle: 'slow',
-        hasDrone: true,
-        hasTexture: true,
-        envelope: 'pad'
-      },
-      rhythmic: {
-        name: 'Rhythmic',
-        tempoMod: [1.0, 1.2],
-        melodyRange: ['mid', 'high'],
-        bassStyle: 'walking',
-        chordDensity: [0.6, 0.9],
-        arpSpeed: [0.5, 0.8],
-        rhythmPattern: ['straight', 'syncopated'],
-        oscTypes: ['square', 'sawtooth'],
-        attackStyle: 'normal',
-        hasDrone: false,
-        hasTexture: false,
-        envelope: 'pluck'
-      },
-      melodic: {
-        name: 'Melodic',
-        tempoMod: [0.9, 1.1],
-        melodyRange: ['mid', 'high', 'ultra-high'],
-        bassStyle: 'static',
-        chordDensity: [0.4, 0.6],
-        arpSpeed: [0.2, 0.4],
-        rhythmPattern: ['straight'],
-        oscTypes: ['sine', 'triangle'],
-        attackStyle: 'normal',
-        hasDrone: false,
-        hasTexture: true,
-        envelope: 'bell'
-      },
-      textural: {
-        name: 'Textural',
-        tempoMod: [0.7, 0.9],
-        melodyRange: ['low', 'mid'],
-        bassStyle: 'drone',
-        chordDensity: [0.1, 0.3],
-        arpSpeed: [0.3, 0.6],
-        rhythmPattern: ['none'],
-        oscTypes: ['sine'],
-        attackStyle: 'slow',
-        hasDrone: true,
-        hasTexture: true,
-        envelope: 'pad'
-      },
-      industrial: {
-        name: 'Industrial',
-        tempoMod: [1.1, 1.4],
-        melodyRange: ['low', 'mid'],
-        bassStyle: ['pulsing', 'walking'],
-        chordDensity: [0.5, 0.8],
-        arpSpeed: [0.6, 1.0],
-        rhythmPattern: ['driving', 'broken'],
-        oscTypes: ['sawtooth', 'square'],
-        attackStyle: 'hard',
-        hasDrone: true,
-        hasTexture: true,
-        envelope: 'glitch'
-      },
-      ethereal: {
-        name: 'Ethereal',
-        tempoMod: [0.75, 0.95],
-        melodyRange: ['mid', 'high', 'ultra-high'],
-        bassStyle: 'drone',
-        chordDensity: [0.2, 0.4],
-        arpSpeed: [0.4, 0.7],
-        rhythmPattern: ['none', 'floating'],
-        oscTypes: ['sine', 'triangle'],
-        attackStyle: 'slow',
-        hasDrone: true,
-        hasTexture: true,
-        envelope: 'pad'
-      },
-      minimal: {
-        name: 'Minimal',
-        tempoMod: [0.85, 1.05],
-        melodyRange: ['low'],
-        bassStyle: ['static', 'pulsing'],
-        chordDensity: [0.1, 0.3],
-        arpSpeed: [0, 0.2],
-        rhythmPattern: ['straight'],
-        oscTypes: ['sine'],
-        attackStyle: 'slow',
-        hasDrone: true,
-        hasTexture: false,
-        envelope: 'pad'
-      },
-      intense: {
-        name: 'Intense',
-        tempoMod: [1.2, 1.5],
-        melodyRange: ['mid', 'high'],
-        bassStyle: ['walking', 'driving'],
-        chordDensity: [0.7, 1.0],
-        arpSpeed: [0.7, 1.0],
-        rhythmPattern: ['driving', 'syncopated'],
-        oscTypes: ['sawtooth', 'square', 'triangle'],
-        attackStyle: 'hard',
-        hasDrone: true,
-        hasTexture: true,
-        envelope: 'pluck'
-      },
-      mysterious: {
-        name: 'Mysterious',
-        tempoMod: [0.8, 1.0],
-        melodyRange: ['low', 'mid'],
-        bassStyle: 'walking',
-        chordDensity: [0.3, 0.5],
-        arpSpeed: [0.3, 0.5],
-        rhythmPattern: ['broken', 'floating'],
-        oscTypes: ['sine', 'triangle'],
-        attackStyle: 'slow',
-        hasDrone: true,
-        hasTexture: true,
-        envelope: 'pad'
-      },
-      glitchy: {
-        name: 'Glitchy',
-        tempoMod: [0.9, 1.3],
-        melodyRange: ['low', 'mid', 'high'],
-        bassStyle: 'pulsing',
-        chordDensity: [0.4, 0.7],
-        arpSpeed: [0.5, 1.0],
-        rhythmPattern: ['broken', 'syncopated'],
-        oscTypes: ['square', 'sawtooth'],
-        attackStyle: 'hard',
-        hasDrone: false,
-        hasTexture: true,
-        envelope: 'glitch'
-      }
+      ambient: { name: 'Ambient', tempoMod: [0.8, 1.0], melodyRange: ['low', 'mid'], bassStyle: 'drone', chordDensity: [0.2, 0.4], arpSpeed: [0, 0.2], oscTypes: ['sine', 'triangle'], attackStyle: 'slow', hasDrone: true, hasTexture: true },
+      rhythmic: { name: 'Rhythmic', tempoMod: [1.0, 1.2], melodyRange: ['mid', 'high'], bassStyle: 'walking', chordDensity: [0.6, 0.9], arpSpeed: [0.5, 0.8], oscTypes: ['square', 'sawtooth'], attackStyle: 'normal', hasDrone: false, hasTexture: false },
+      melodic: { name: 'Melodic', tempoMod: [0.9, 1.1], melodyRange: ['mid', 'high'], bassStyle: 'static', chordDensity: [0.4, 0.6], arpSpeed: [0.2, 0.4], oscTypes: ['sine', 'triangle'], attackStyle: 'normal', hasDrone: false, hasTexture: true },
+      textural: { name: 'Textural', tempoMod: [0.7, 0.9], melodyRange: ['low', 'mid'], bassStyle: 'drone', chordDensity: [0.1, 0.3], arpSpeed: [0.3, 0.6], oscTypes: ['sine'], attackStyle: 'slow', hasDrone: true, hasTexture: true },
+      industrial: { name: 'Industrial', tempoMod: [1.1, 1.4], melodyRange: ['low', 'mid'], bassStyle: 'pulsing', chordDensity: [0.5, 0.8], arpSpeed: [0.6, 1.0], oscTypes: ['sawtooth', 'square'], attackStyle: 'hard', hasDrone: true, hasTexture: true },
+      ethereal: { name: 'Ethereal', tempoMod: [0.75, 0.95], melodyRange: ['mid', 'high'], bassStyle: 'drone', chordDensity: [0.2, 0.4], arpSpeed: [0.4, 0.7], oscTypes: ['sine', 'triangle'], attackStyle: 'slow', hasDrone: true, hasTexture: true },
+      minimal: { name: 'Minimal', tempoMod: [0.85, 1.05], melodyRange: ['low'], bassStyle: 'static', chordDensity: [0.1, 0.3], arpSpeed: [0, 0.2], oscTypes: ['sine'], attackStyle: 'slow', hasDrone: true, hasTexture: false },
+      intense: { name: 'Intense', tempoMod: [1.2, 1.5], melodyRange: ['mid', 'high'], bassStyle: 'driving', chordDensity: [0.7, 1.0], arpSpeed: [0.7, 1.0], oscTypes: ['sawtooth', 'square'], attackStyle: 'hard', hasDrone: true, hasTexture: true }
     };
 
-    // Genre to style mapping
-    const genreStyles = {
-      game: ['intense', 'rhythmic', 'industrial'],
-      api: ['minimal', 'ambient', 'textural'],
-      library: ['ambient', 'minimal', 'textural'],
-      frontend: ['melodic', 'ethereal', 'minimal'],
-      backend: ['industrial', 'minimal', 'mysterious'],
-      ml: ['textural', 'ethereal', 'mysterious'],
-      data: ['rhythmic', 'minimal', 'industrial'],
-      mobile: ['melodic', 'ethereal', 'intense'],
-      devops: ['industrial', 'intense', 'glitchy'],
-      security: ['mysterious', 'industrial', 'glitchy'],
-      default: ['ambient', 'melodic', 'textural', 'rhythmic']
-    };
-
-    // Render script grid in alphabetical order
-    function renderScriptGrid() {
-      const grid = document.getElementById('script-grid');
-      if (!grid) return;
-      
-      grid.innerHTML = '';
-
-      // SCRIPTS array is already sorted alphabetically by name
-      // Order: Brackets, Latin, Numbers, Operators, Symbols, Whitespace
-      SCRIPTS.forEach(script => {
-        const item = document.createElement('div');
-        item.className = 'script-item';
-        item.dataset.script = script.name.toLowerCase();
-        item.innerHTML = `
-          <div class="script-icon">${script.icon}</div>
-          <div class="script-info">
-            <div class="script-name">${script.name}</div>
-            <div class="script-chars">${script.chars}</div>
-          </div>
-          <div class="script-note">${script.noteLabel}</div>
-        `;
-        grid.appendChild(item);
-      });
-    }
-
-    // Clear script highlights when stopping
-    function clearScriptHighlight() {
-      document.querySelectorAll('.script-item').forEach(item => {
-        item.classList.remove('active');
-      });
-    }
-
-    // Seeded random - makes each repo unique
+    // Seeded random
     function seededRandom(seed) {
       const x = Math.sin(seed * 9999) * 10000;
       return x - Math.floor(x);
@@ -1300,39 +1168,21 @@
       return 440 * Math.pow(2, (midi - 69) / 12);
     }
 
-    function detectRepoType(name, content) {
-      const lower = (name + ' ' + content).toLowerCase();
-      
-      if (lower.match(/game|unity|play|quest|adventure|godot|unity/)) return 'game';
-      if (lower.match(/api|rest|endpoint|express/)) return 'api';
-      if (lower.match(/react|vue|angular|frontend|component|jsx/)) return 'frontend';
-      if (lower.match(/server|backend|database|orm|sql/)) return 'backend';
-      if (lower.match(/tensorflow|pytorch|neural|ml|ai|learn|model/)) return 'ml';
-      if (lower.match(/data|csv|json|analytics|chart|visual/)) return 'data';
-      if (lower.match(/ios|android|mobile|flutter|react-native/)) return 'mobile';
-      if (lower.match(/docker|kubernetes|ci|deploy|terraform/)) return 'devops';
-      if (lower.match(/crypto|security|auth|encrypt|auth/)) return 'security';
-      if (lower.match(/lib|tool|util|helper|package/)) return 'library';
-      return 'default';
-    }
-
-    function analyzeContent(content) {
+    // Analyze content
+    function analyzeContent(content, seed) {
+      songState.seed = seed;
       let mood = 0.5, complexity = 0.5;
       const lower = content.toLowerCase();
 
-      const positive = ['awesome', 'amazing', 'love', 'great', 'excellent', 'beautiful', 'fantastic', 'success'];
+      const positive = ['awesome', 'amazing', 'love', 'great', 'excellent', 'beautiful', 'success'];
       const negative = ['error', 'bug', 'fail', 'broken', 'wrong', 'terrible', 'crash', 'issue'];
-      const complex = ['algorithm', 'complex', 'advanced', 'distributed', 'concurrent', 'parallel', 'sophisticated'];
-      const simple = ['simple', 'easy', 'basic', 'minimal', 'tiny', 'lightweight', 'quick'];
-      const intense = ['fast', 'powerful', 'massive', 'huge', 'epic', 'intense', 'extreme'];
-      const gentle = ['soft', 'gentle', 'smooth', 'calm', 'peaceful', 'tranquil'];
+      const complex = ['algorithm', 'complex', 'advanced', 'distributed', 'concurrent', 'parallel'];
+      const simple = ['simple', 'easy', 'basic', 'minimal', 'tiny', 'lightweight'];
 
       positive.forEach(w => { if (lower.includes(w)) mood += 0.05; });
       negative.forEach(w => { if (lower.includes(w)) mood -= 0.05; });
       complex.forEach(w => { if (lower.includes(w)) complexity += 0.07; });
       simple.forEach(w => { if (lower.includes(w)) complexity -= 0.07; });
-      intense.forEach(w => { if (lower.includes(w)) { mood += 0.05; complexity += 0.03; } });
-      gentle.forEach(w => { if (lower.includes(w)) { mood -= 0.03; complexity -= 0.02; } });
 
       return {
         mood: Math.max(0.15, Math.min(0.85, mood)),
@@ -1340,12 +1190,69 @@
       };
     }
 
+    // Generate song parameters for content
+    function generateSongStyle(content, seed) {
+      const analysis = analyzeContent(content, seed);
+      
+      // Pick style based on content analysis
+      let styleName = getRandomChoice(['ambient', 'melodic', 'textural', 'rhythmic'], 1);
+      if (analysis.mood > 0.65) styleName = getRandomChoice(['melodic', 'ethereal', 'intense'], 2);
+      else if (analysis.mood < 0.4) styleName = getRandomChoice(['mysterious', 'textural', 'ambient'], 3);
+      
+      if (analysis.complexity > 0.7 && getRandom(4) > 0.5) {
+        styleName = getRandomChoice(['industrial', 'intense'], 5);
+      }
+
+      const style = styles[styleName];
+
+      // Determine scale
+      let scaleName = 'minor';
+      if (analysis.mood > 0.6) scaleName = getRandomChoice(['major', 'mixolydian', 'lydian'], 6);
+      else if (analysis.mood < 0.4) scaleName = getRandomChoice(['harmonicMinor', 'phrygian', 'blues'], 7);
+
+      const scale = scales[scaleName];
+
+      // Duration: 15-30 seconds per file
+      const duration = Math.floor(getRandomRange(15, 30, 20));
+
+      songState = {
+        ...songState,
+        scale: scaleName,
+        scaleNotes: scale.notes,
+        rootNote: 36 + Math.floor(getRandomRange(0, 24, 12)),
+        tempo: Math.floor(getRandomRange(60, 150, 10) * getRandomRange(style.tempoMod[0], style.tempoMod[1], 11)),
+        intensity: Math.max(0.2, Math.min(0.9, analysis.mood + getRandomRange(-0.1, 0.1, 13))),
+        complexity: Math.max(0.2, Math.min(0.9, analysis.complexity + getRandomRange(-0.1, 0.1, 14))),
+        beat: 0,
+        style: styleName,
+        melodyRange: getRandomChoice(style.melodyRange, 15),
+        bassStyle: getRandomChoice(Array.isArray(style.bassStyle) ? style.bassStyle : [style.bassStyle], 16),
+        chordDensity: getRandomRange(style.chordDensity[0], style.chordDensity[1], 17),
+        arpSpeed: getRandomRange(style.arpSpeed[0], style.arpSpeed[1], 18),
+        oscTypes: style.oscTypes,
+        attackStyle: style.attackStyle,
+        hasDrone: style.hasDrone && getRandom(20) > 0.3,
+        hasTexture: style.hasTexture && getRandom(21) > 0.3,
+        songDuration: duration,
+        fadeOutStart: duration - 5
+      };
+
+      return {
+        type: style.name,
+        mood: scale.mood,
+        scale: scale.name,
+        tempo: songState.tempo + ' BPM',
+        duration: duration,
+        intensity: songState.intensity
+      };
+    }
+
+    // Audio initialization
     function initAudio() {
       if (audioInitialized) return;
 
       try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
         masterGain = audioCtx.createGain();
         masterGain.gain.value = 0.5;
 
@@ -1412,348 +1319,31 @@
       } catch (e) {}
     }
 
-    // ===== GEMINI API INTEGRATION =====
-    
-    // Get API key from various sources
-    function getApiKey() {
-      // Check for global variable first (recommended for web apps)
-      if (typeof window !== 'undefined' && window.GEMINI_API_KEY) {
-        return window.GEMINI_API_KEY;
-      }
-      
-      // Check for hidden input field (alternative approach)
-      const input = document.getElementById('gemini-api-key');
-      if (input && input.value.trim()) {
-        return input.value.trim();
-      }
-      
-      // No API key found
-      return null;
-    }
-
-    // Call Gemini API to get advanced analysis instructions
-    async function getAdvancedInstructions(repoName, content, apiKey) {
-      if (!apiKey) {
-        console.log('No Gemini API key found - using fallback analysis');
-        return null;
-      }
-
-      // Create a prompt that asks Gemini to analyze the repository
-      const prompt = `Analyze this code repository (${repoName}) and determine the best music generation parameters.
-      
-Please analyze the code content and respond with ONLY a JSON object (no markdown, no explanation):
-{
-  "repoType": "game|api|frontend|backend|ml|data|mobile|devops|security|library|default",
-  "mood": 0.0_to_1.0,
-  "complexity": 0.0_to_1.0,
-  "recommendedStyle": "ambient|rhythmic|melodic|textural|industrial|ethereal|minimal|intense|mysterious|glitchy",
-  "recommendedScale": "major|minor|harmonicMinor|dorian|phrygian|lydian|mixolydian|locrian|pentatonicMinor|blues|wholeTone|chromatic",
-  "tempo": 60_to_180,
-  "intensity": 0.0_to_1.0,
-  "moodDescription": "brief_description",
-  "reasoning": "why_these_choices"
-}
-
-Content to analyze:
-${content.substring(0, 3000)}`;
-
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{ text: prompt }]
-            }]
-          })
-        });
-
-        if (!response.ok) {
-          console.error('Gemini API error:', response.status);
-          return null;
-        }
-
-        const data = await response.json();
-        
-        if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-          // Extract the JSON from Gemini's response
-          const responseText = data.candidates[0].content.parts[0].text;
-          
-          // Clean up the response - remove markdown code block formatting if present
-          let cleanedText = responseText.trim();
-          if (cleanedText.startsWith('json')) {
-            cleanedText = cleanedText.substring(7);
-          } else if (cleanedText.startsWith('')) {
-            cleanedText = cleanedText.substring(3);
-          }
-          if (cleanedText.endsWith('')) {
-            cleanedText = cleanedText.substring(0, cleanedText.length - 3);
-          }
-          
-          try {
-            const instructions = JSON.parse(cleanedText.trim());
-            console.log('Gemini analysis received:', instructions);
-            return instructions;
-          } catch (e) {
-            console.error('Failed to parse Gemini response:', e);
-            return null;
-          }
-        }
-        
-        return null;
-      } catch (error) {
-        console.error('Gemini API call failed:', error);
-        return null;
-      }
-    }
-
-    // Apply Gemini's advanced instructions to the song generation
-    function applyAdvancedInstructions(instructions, fallbackAnalysis) {
-      if (!instructions) {
-        // No Gemini instructions - use fallback analysis
-        return fallbackAnalysis;
-      }
-
-      // If Gemini provided valid instructions, use them to create the analysis
-      const seed = Date.now();
-      
-      // Update song state with Gemini's recommendations
-      const style = styles[instructions.recommendedStyle] || styles.ambient;
-      const scale = scales[instructions.recommendedScale] || scales.minor;
-      
-      // Calculate tempo based on Gemini's recommendation
-      const tempoBase = instructions.tempo || 120;
-      const tempoMod = 1.0; // Use Gemini's tempo directly
-
-      songState = {
-        ...songState,
-        repoType: instructions.repoType || 'default',
-        repoName: '',
-        scale: instructions.recommendedScale || 'minor',
-        scaleNotes: scale.notes,
-        rootNote: 36 + Math.floor(Math.random() * 24),
-        tempo: Math.floor(tempoBase * tempoMod),
-        intensity: Math.max(0.2, Math.min(0.9, instructions.intensity || instructions.mood)),
-        complexity: Math.max(0.2, Math.min(0.9, instructions.complexity || 0.5)),
-        beat: 0,
-        // Style selections from Gemini
-        style: instructions.recommendedStyle || 'ambient',
-        melodyRange: style.melodyRange[Math.floor(Math.random() * style.melodyRange.length)],
-        bassStyle: Array.isArray(style.bassStyle) ? style.bassStyle[Math.floor(Math.random() * style.bassStyle.length)] : style.bassStyle,
-        chordDensity: style.chordDensity[0] + Math.random() * (style.chordDensity[1] - style.chordDensity[0]),
-        arpSpeed: style.arpSpeed[0] + Math.random() * (style.arpSpeed[1] - style.arpSpeed[0]),
-        rhythmPattern: style.rhythmPattern[Math.floor(Math.random() * style.rhythmPattern.length)],
-        oscTypes: style.oscTypes,
-        attackStyle: style.attackStyle,
-        hasDrone: style.hasDrone && Math.random() > 0.3,
-        hasTexture: style.hasTexture && Math.random() > 0.3,
-        envelope: style.envelope
-      };
-
-      return {
-        type: style.name,
-        mood: scale.mood,
-        scale: scale.name,
-        tempo: songState.tempo + ' BPM',
-        style: style.name.toLowerCase(),
-        title: `${style.name.toLowerCase()}_${instructions.recommendedScale}_gemini`,
-        intensity: songState.intensity,
-        mapping: {
-          type: instructions.repoType,
-          sentiment: instructions.mood,
-          complexity: instructions.complexity,
-          size: 0,
-          language: instructions.recommendedStyle,
-          mood: scale.mood
-        },
-        geminiPowered: true,
-        moodDescription: instructions.moodDescription,
-        reasoning: instructions.reasoning
-      };
-    }
-
-    // Create analysis result (for when we have Gemini analysis)
-    function createAnalysisResult(instructions, repoName) {
-      if (!instructions) return null;
-
-      const style = styles[instructions.recommendedStyle] || styles.ambient;
-      const scale = scales[instructions.recommendedScale] || scales.minor;
-
-      // Calculate unique seed from content
-      songState.seed = Date.now();
-
-      // Update song state with Gemini's recommendations
-      const tempoBase = instructions.tempo || 120;
-      const tempoMod = 1.0;
-
-      songState = {
-        ...songState,
-        repoType: instructions.repoType || 'default',
-        repoName: repoName,
-        scale: instructions.recommendedScale || 'minor',
-        scaleNotes: scale.notes,
-        rootNote: 36 + Math.floor(Math.random() * 24),
-        tempo: Math.floor(tempoBase * tempoMod),
-        intensity: Math.max(0.2, Math.min(0.9, instructions.intensity || instructions.mood)),
-        complexity: Math.max(0.2, Math.min(0.9, instructions.complexity || 0.5)),
-        beat: 0,
-        // Style selections from Gemini
-        style: instructions.recommendedStyle || 'ambient',
-        melodyRange: style.melodyRange[Math.floor(Math.random() * style.melodyRange.length)],
-        bassStyle: Array.isArray(style.bassStyle) ? style.bassStyle[Math.floor(Math.random() * style.bassStyle.length)] : style.bassStyle,
-        chordDensity: style.chordDensity[0] + Math.random() * (style.chordDensity[1] - style.chordDensity[0]),
-        arpSpeed: style.arpSpeed[0] + Math.random() * (style.arpSpeed[1] - style.arpSpeed[0]),
-        rhythmPattern: style.rhythmPattern[Math.floor(Math.random() * style.rhythmPattern.length)],
-        oscTypes: style.oscTypes,
-        attackStyle: style.attackStyle,
-        hasDrone: style.hasDrone && Math.random() > 0.3,
-        hasTexture: style.hasTexture && Math.random() > 0.3,
-        envelope: style.envelope
-      };
-
-      return {
-        type: style.name,
-        mood: scale.mood,
-        scale: scale.name,
-        tempo: songState.tempo + ' BPM',
-        style: style.name.toLowerCase(),
-        title: `${style.name.toLowerCase()}_${instructions.recommendedScale}_${repoName}`,
-        intensity: songState.intensity,
-        mapping: {
-          type: instructions.repoType,
-          sentiment: instructions.mood,
-          complexity: instructions.complexity,
-          size: 0,
-          language: instructions.recommendedStyle,
-          mood: scale.mood
-        },
-        geminiPowered: true,
-        moodDescription: instructions.moodDescription,
-        reasoning: instructions.reasoning
-      };
-    }
-
-    // Main generation function - now async to support Gemini API
-    async function generateSongStyle(repoName, content) {
-      // Calculate unique seed from content
-      let seed = 0;
-      for (let i = 0; i < Math.min(800, content.length); i++) {
-        seed += content.charCodeAt(i) * (i + 1) * ((i % 10) + 1);
-      }
-      songState.seed = seed;
-
-      const fallbackAnalysis = analyzeContent(content);
-      
-      // Detect repo type
-      const repoType = detectRepoType(repoName, content);
-      
-      // Try to get Gemini API key and advanced instructions
-      const apiKey = getApiKey();
-      
-      if (apiKey) {
-        // We have an API key - try to get Gemini's analysis
-        const instructions = await getAdvancedInstructions(repoName, content, apiKey);
-        
-        if (instructions) {
-          // Gemini provided valid instructions - apply them
-          const result = createAnalysisResult(instructions, repoName);
-          if (result) {
-            return result;
-          }
-        }
-      }
-
-      // Fall back to the original algorithm if no Gemini key or API failed
-      // Pick style based on repo type + content analysis
-      const possibleStyles = genreStyles[repoType] || genreStyles.default;
-      let styleName = getRandomChoice(possibleStyles, 1);
-      
-      // Modify style based on mood
-      if (fallbackAnalysis.mood > 0.65) {
-        styleName = getRandomChoice(['melodic', 'ethereal', 'intense'], 2);
-      } else if (fallbackAnalysis.mood < 0.4) {
-        styleName = getRandomChoice(['mysterious', 'textural', 'ambient'], 3);
-      }
-      
-      // Modify style based on complexity
-      if (fallbackAnalysis.complexity > 0.7 && getRandom(4) > 0.5) {
-        styleName = getRandomChoice(['glitchy', 'industrial', 'intense'], 5);
-      } else if (fallbackAnalysis.complexity < 0.35 && getRandom(5) > 0.5) {
-        styleName = 'minimal';
-      }
-
-      const style = styles[styleName];
-
-      // Determine scale based on mood
-      let scaleName = 'minor';
-      if (fallbackAnalysis.mood > 0.6) scaleName = getRandomChoice(['major', 'mixolydian', 'lydian'], 6);
-      else if (fallbackAnalysis.mood < 0.4) scaleName = getRandomChoice(['harmonicMinor', 'phrygian', 'locrian', 'blues'], 7);
-      else scaleName = getRandomChoice(['minor', 'dorian', 'phrygian', 'pentatonicMinor', 'wholeTone'], 8);
-      
-      // Sometimes use chromatic for very complex repos
-      if (fallbackAnalysis.complexity > 0.75 && getRandom(9) > 0.7) {
-        scaleName = 'chromatic';
-      }
-
-      const scale = scales[scaleName];
-
-      // Set all style parameters
-      const tempoBase = getRandomRange(60, 150, 10);
-      const tempoMod = getRandomRange(style.tempoMod[0], style.tempoMod[1], 11);
-      
-      songState = {
-        ...songState,
-        repoType,
-        repoName,
-        scale: scaleName,
-        scaleNotes: scale.notes,
-        rootNote: 36 + Math.floor(getRandomRange(0, 24, 12)),
-        tempo: Math.floor(tempoBase * tempoMod),
-        intensity: Math.max(0.2, Math.min(0.9, fallbackAnalysis.mood + getRandomRange(-0.1, 0.1, 13))),
-        complexity: Math.max(0.2, Math.min(0.9, fallbackAnalysis.complexity + getRandomRange(-0.1, 0.1, 14))),
-        beat: 0,
-        // Style selections
-        style: styleName,
-        melodyRange: getRandomChoice(style.melodyRange, 15),
-        bassStyle: getRandomChoice(Array.isArray(style.bassStyle) ? style.bassStyle : [style.bassStyle], 16),
-        chordDensity: getRandomRange(style.chordDensity[0], style.chordDensity[1], 17),
-        arpSpeed: getRandomRange(style.arpSpeed[0], style.arpSpeed[1], 18),
-        rhythmPattern: getRandomChoice(style.rhythmPattern, 19),
-        oscTypes: style.oscTypes,
-        attackStyle: style.attackStyle,
-        hasDrone: style.hasDrone && getRandom(20) > 0.3,
-        hasTexture: style.hasTexture && getRandom(21) > 0.3,
-        envelope: style.envelope
-      };
-
-      return {
-        type: style.name,
-        mood: scale.mood,
-        scale: scale.name,
-        tempo: songState.tempo + ' BPM',
-        style: style.name.toLowerCase(),
-        title: `${style.name.toLowerCase()}_${scaleName}_${repoName}`,
-        intensity: songState.intensity,
-        mapping: {
-          type: repoType,
-          sentiment: fallbackAnalysis.mood,
-          complexity: fallbackAnalysis.complexity,
-          size: content.length,
-          language: styleName,
-          mood: scale.mood
-        },
-        geminiPowered: false
-      };
-    }
-
+    // Music scheduler
     function scheduleMusic() {
       if (!audioCtx || !isPlaying) return;
 
       const secondsPerBeat = 60.0 / songState.tempo;
       const lookahead = 0.1;
       const currentTime = audioCtx.currentTime;
+
+      // Check duration
+      if (songState.songDuration > 0) {
+        const elapsed = currentTime - songState.startTime;
+        if (elapsed >= songState.songDuration) {
+          stopPlayback();
+          document.getElementById('play-btn').textContent = '▶';
+          document.getElementById('play-btn').classList.remove('playing');
+          document.getElementById('status').textContent = 'track ended';
+          return;
+        }
+        
+        if (elapsed >= songState.fadeOutStart && masterGain) {
+          const fadeProgress = (elapsed - songState.fadeOutStart) / 5;
+          const fadeVolume = Math.max(0, 0.5 * (1 - fadeProgress));
+          masterGain.gain.setValueAtTime(fadeVolume, currentTime);
+        }
+      }
 
       while (songState.noteTime < currentTime + lookahead) {
         const bar = Math.floor(songState.beat / 4);
@@ -1762,37 +1352,25 @@ ${content.substring(0, 3000)}`;
         const scale = songState.scaleNotes;
         const root = songState.rootNote;
 
-        // Get pattern variation based on beat
-        const patternOffset = Math.floor(songState.beat / 16);
-        
-        // ===== BASS =====
-        // Bass provides the harmonic foundation - keep it musical and stable
+        // Bass
         const bassType = songState.bassStyle;
         let bassPlay = false;
         let bassNote = root - 12;
         
         if (bassType === 'drone') {
-          // Drone: play on beats 1 and 3
           if (beat === 0 || beat === 2) bassPlay = true;
           bassNote = root - 12 + (getRandom(songState.beat * 7) > 0.7 ? 5 : 0);
         } else if (bassType === 'walking') {
-          // Walking bass: play every beat, moving by small intervals
           bassPlay = true;
           const walkStep = Math.floor(songState.beat / 4) % 4;
           if (walkStep === 0) bassNote = root - 12;
           else if (walkStep === 1) bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 8) * 3) % scale.length];
-          else if (walkStep === 2) bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 9) * 4) % scale.length];
-          else bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 10) * 2) % scale.length];
+          else bassNote = root - 12 + scale[Math.floor(getRandom(songState.beat * 9) * 4) % scale.length];
         } else if (bassType === 'pulsing') {
-          // Pulsing: syncopated pattern
-          bassPlay = beat % 2 === 0 || (beat === 3 && getRandom(songState.beat * 11) > 0.5);
-          bassNote = root - 12 + (getRandom(songState.beat * 12) > 0.6 ? 7 : 0);
+          bassPlay = beat % 2 === 0;
         } else if (bassType === 'driving') {
-          // Driving: constant eighth notes feel
           bassPlay = true;
-          bassNote = root - 12 + (getRandom(songState.beat * 13) > 0.5 ? scale[Math.floor(getRandom(songState.beat * 14) * 4) % scale.length] : 0);
         } else {
-          // Static: just root notes
           bassPlay = beat === 0;
         }
 
@@ -1804,157 +1382,66 @@ ${content.substring(0, 3000)}`;
           
           if (songState.attackStyle === 'slow') attack = 0.05;
           if (songState.attackStyle === 'hard') attack = 0.005;
-          if (bassType === 'pulsing') { duration = secondsPerBeat * 0.8; vol *= 0.8; }
           
           playNote(midiToFreq(bassNote), time, duration, oscType, vol, attack, 0.15);
         }
 
-        // ===== DRONE =====
+        // Drone
         if (songState.hasDrone && beat === 0 && getRandom(songState.beat * 16) > 0.4) {
           const droneNote = root - 24 + (getRandom(songState.beat * 17) > 0.5 ? 7 : 12);
           playNote(midiToFreq(droneNote), time, secondsPerBeat * 2, 'sine', 0.25 * songState.intensity, 0.1, 0.3);
         }
 
-        // ===== CHORDS =====
-        // Chords provide harmonic texture - keep them musical
+        // Chords
         if (getRandom(songState.beat * 18) < songState.chordDensity) {
           const chordRoot = scale[bar % scale.length];
           const chordType = Math.floor(getRandom(songState.beat * 19 + 100) * 4);
           
           let chordNotes = [];
-          if (chordType === 0) {
-            // Major
-            chordNotes = [chordRoot, chordRoot + 4, chordRoot + 7];
-          } else if (chordType === 1) {
-            // Minor
-            chordNotes = [chordRoot, chordRoot + 3, chordRoot + 7];
-          } else if (chordType === 2) {
-            // 7th
-            chordNotes = [chordRoot, chordRoot + (getRandom(songState.beat * 20) > 0.5 ? 4 : 3), chordRoot + 7, chordRoot + 10];
-          } else {
-            // Suspended or extended
-            chordNotes = [chordRoot, chordRoot + 5, chordRoot + 7, chordRoot + (getRandom(songState.beat * 21) > 0.5 ? 11 : 0)];
-          }
+          if (chordType === 0) chordNotes = [chordRoot, chordRoot + 4, chordRoot + 7];
+          else if (chordType === 1) chordNotes = [chordRoot, chordRoot + 3, chordRoot + 7];
+          else chordNotes = [chordRoot, chordRoot + (getRandom(songState.beat * 20) > 0.5 ? 4 : 3), chordRoot + 7];
           
-          // Spread chord notes
           chordNotes.forEach((note, i) => {
-            const delay = i * (songState.attackStyle === 'slow' ? 30 : 15);
+            const delay = i * 15;
             const oscType = songState.oscTypes[i % songState.oscTypes.length];
             const noteVol = 0.15 * songState.intensity * (1 - i * 0.15);
-            playNote(midiToFreq(root + note), time + delay * 0.001, secondsPerBeat * (songState.envelope === 'pad' ? 2 : 1.2), oscType, noteVol, 0.02, 0.2);
+            playNote(midiToFreq(root + note), time + delay * 0.001, secondsPerBeat * 1.5, oscType, noteVol, 0.02, 0.2);
           });
         }
 
-        // ===== MELODY - CHARACTER DRIVEN =====
-        // Melody is driven by actual code characters - each character maps to a specific note
-        const range = songState.melodyRange;
-        let baseOctave = 4;
-        if (range === 'low') baseOctave = 3;
-        if (range === 'mid') baseOctave = 4;
-        if (range === 'high') baseOctave = 5;
-        if (range === 'ultra-high') baseOctave = 5;
-
-        // Different melodic patterns based on style
+        // Melody - character driven
         let melodyChance = 0.4;
         if (songState.style === 'melodic') melodyChance = 0.7;
         if (songState.style === 'ambient') melodyChance = 0.25;
-        if (songState.style === 'rhythmic') melodyChance = 0.5;
 
-        if (getRandom(songState.beat * 26) < melodyChance) {
-          // Get character at current position
+        if (getRandom(songState.beat * 26) < melodyChance && currentContent) {
           const char = currentContent[contentPosition % currentContent.length];
           const midiNote = getNoteForCharacter(char, contentPosition);
           
           if (midiNote !== null) {
-            // Calculate note length based on style
-            const noteLength = getRandom(songState.beat * 28) > 0.6 ? secondsPerBeat * 0.75 : 
-                              getRandom(songState.beat * 29) > 0.5 ? secondsPerBeat * 0.5 : secondsPerBeat;
-            
+            const noteLength = getRandom(songState.beat * 28) > 0.6 ? secondsPerBeat * 0.75 : secondsPerBeat;
             const oscType = getRandom(songState.beat * 30) > 0.4 ? 'triangle' : (songState.oscTypes[0] || 'sine');
-            let attack = 0.01;
-            if (songState.attackStyle === 'slow') attack = 0.08;
+            let attack = songState.attackStyle === 'slow' ? 0.08 : 0.01;
             
             playNote(midiToFreq(midiNote), time, noteLength, oscType, 0.35 * songState.intensity, attack, 0.15);
-            
-            // Add harmony note occasionally based on character category
-            if (getRandom(songState.beat * 31) > 0.6 && songState.intensity > 0.5) {
-              // Find next scale degree for harmony
-              const scale = songState.scaleNotes;
-              const degreeIndex = (SCRIPTS.findIndex(s => s.scaleDegree === (midiNote - songState.rootNote) % 12) + 2) % scale.length;
-              const harmonyNote = root + scale[degreeIndex] + baseOctave * 12;
-              playNote(midiToFreq(harmonyNote), time, noteLength * 0.8, 'sine', 0.15 * songState.intensity, attack, 0.1);
-            }
-            
-            // Advance content position after playing a note
             contentPosition++;
           }
-        } else {
-          // Even when not playing melody, advance position to match code rhythm
+        } else if (currentContent) {
           contentPosition++;
         }
 
-        // ===== ARPEGGIO =====
+        // Arpeggio
         if (songState.arpSpeed > 0.2 && getRandom(songState.beat * 32) < songState.arpSpeed * 0.5) {
           const arpRoot = scale[bar % scale.length];
-          const arpPattern = Math.floor(getRandom(songState.beat * 33 + 300) * 6);
-          
-          // Different arpeggio patterns
-          if (arpPattern === 0) {
-            // Up
-            for (let i = 0; i < 4; i++) {
-              const delay = i * (secondsPerBeat * 0.25);
-              playNote(midiToFreq(root + arpRoot + i * 4), time + delay, secondsPerBeat * 0.2, 'sine', 0.06, 0.01, 0.05);
-            }
-          } else if (arpPattern === 1) {
-            // Down
-            for (let i = 0; i < 4; i++) {
-              const delay = i * (secondsPerBeat * 0.25);
-              playNote(midiToFreq(root + arpRoot + 12 - i * 4), time + delay, secondsPerBeat * 0.2, 'sine', 0.06, 0.01, 0.05);
-            }
-          } else if (arpPattern === 2) {
-            // Cascade
-            for (let i = 0; i < 6; i++) {
-              const delay = i * (secondsPerBeat * 0.16);
-              playNote(midiToFreq(root + arpRoot + (i % 3) * 4 + 12), time + delay, secondsPerBeat * 0.12, 'triangle', 0.05, 0.01, 0.03);
-            }
-          } else if (arpPattern === 3) {
-            // Zigzag
-            const notes = [0, 4, 0, 7, 4, 7, 0, 4];
-            notes.forEach((offset, i) => {
-              const delay = i * (secondsPerBeat * 0.125);
-              playNote(midiToFreq(root + arpRoot + offset), time + delay, secondsPerBeat * 0.1, 'sine', 0.04, 0.01, 0.02);
-            });
-          } else {
-            // Random pattern
-            for (let i = 0; i < 4; i++) {
-              const noteOffset = scale[Math.floor(getRandom(songState.beat * 34 + i * 100) * scale.length)];
-              const delay = i * (secondsPerBeat * 0.25);
-              playNote(midiToFreq(root + arpRoot + noteOffset), time + delay, secondsPerBeat * 0.2, 'triangle', 0.05, 0.01, 0.04);
-            }
+          for (let i = 0; i < 4; i++) {
+            const delay = i * (secondsPerBeat * 0.25);
+            const noteOffset = scale[Math.floor(getRandom(songState.beat * 33 + i * 100) * scale.length)];
+            playNote(midiToFreq(root + arpRoot + noteOffset), time + delay, secondsPerBeat * 0.2, 'sine', 0.06, 0.01, 0.05);
           }
         }
 
-        // ===== TEXTURE / GLITCH =====
-        if (songState.hasTexture && getRandom(songState.beat * 35) > 0.85) {
-          const textureType = Math.floor(getRandom(songState.beat * 36) * 4);
-          if (textureType === 0) {
-            // Quick frequency sweep
-            const startFreq = midiToFreq(root + scale[Math.floor(getRandom(songState.beat * 37) * scale.length)] + 12 * 4);
-            playNote(startFreq * 0.5, time, secondsPerBeat * 0.15, 'sawtooth', 0.08, 0.001, 0.05);
-          } else if (textureType === 1) {
-            // Noise burst
-            playNote(100 + getRandom(songState.beat * 38) * 200, time, secondsPerBeat * 0.1, 'square', 0.05, 0.001, 0.02);
-          } else if (textureType === 2) {
-            // Harmonic spark
-            const sparkNote = root + scale[Math.floor(getRandom(songState.beat * 39) * scale.length)] + 12 * 5;
-            playNote(midiToFreq(sparkNote), time, secondsPerBeat * 0.3, 'sine', 0.1, 0.02, 0.15);
-          }
-        }
-
-        // Update script monitor visualization based on current character
-        if (songState.beat % 2 === 0) {
-          highlightActiveScript();
-        }
+        if (songState.beat % 2 === 0) highlightActiveScript();
 
         songState.beat++;
         songState.noteTime += secondsPerBeat;
@@ -1963,7 +1450,7 @@ ${content.substring(0, 3000)}`;
       timerID = setTimeout(scheduleMusic, 20);
     }
 
-    function startPlayback() {
+    function startPlayback(content = null) {
       initAudio();
       if (!audioCtx || isPlaying) return false;
 
@@ -1973,7 +1460,16 @@ ${content.substring(0, 3000)}`;
         isPlaying = true;
         songState.beat = 0;
         songState.noteTime = audioCtx.currentTime + 0.05;
-        contentPosition = 0; // Reset content position for character-based playback
+        songState.startTime = audioCtx.currentTime;
+        contentPosition = 0;
+        
+        if (content) {
+          currentContent = content;
+        }
+        
+        if (masterGain) {
+          masterGain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        }
         
         scheduleMusic();
         return true;
@@ -1989,10 +1485,10 @@ ${content.substring(0, 3000)}`;
         clearTimeout(timerID);
         timerID = null;
       }
-      clearScriptHighlight();
+      document.querySelectorAll('.script-item').forEach(item => item.classList.remove('active'));
     }
 
-    // ===== VISUALIZATION =====
+    // Visualization
     const canvas = document.getElementById('wave-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -2011,7 +1507,6 @@ ${content.substring(0, 3000)}`;
       const t = Date.now() * 0.002;
 
       ctx.clearRect(0, 0, w, h);
-
       const intensity = isPlaying ? (songState.intensity || 0.5) : 0.15;
 
       ctx.strokeStyle = '#e0e0e0';
@@ -2032,8 +1527,7 @@ ${content.substring(0, 3000)}`;
         ctx.globalAlpha = 0.6;
         ctx.beginPath();
         for (let x = 0; x < w; x++) {
-          const y = h/2 + Math.sin(x * 0.02 - t * 1.5) * 20 * intensity +
-                    Math.sin(x * 0.05 + t * 0.8) * 10;
+          const y = h/2 + Math.sin(x * 0.02 - t * 1.5) * 20 * intensity + Math.sin(x * 0.05 + t * 0.8) * 10;
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.stroke();
@@ -2045,79 +1539,182 @@ ${content.substring(0, 3000)}`;
 
     drawWaveform();
 
-    // ===== UI =====
-    const searchForm = document.getElementById('search-form');
+    // UI Elements
     const searchInput = document.getElementById('repo-url');
     const generateBtn = document.getElementById('generate-btn');
     const playBtn = document.getElementById('play-btn');
-    const downloadBtn = document.getElementById('download-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const downloadAllBtn = document.getElementById('download-all-btn');
 
-    // Initialize script grid on load - scripts sorted alphabetically
+    // Render script grid
+    function renderScriptGrid() {
+      const grid = document.getElementById('script-grid');
+      grid.innerHTML = '';
+      SCRIPTS.forEach(script => {
+        const item = document.createElement('div');
+        item.className = 'script-item';
+        item.dataset.script = script.name.toLowerCase();
+        item.innerHTML = `
+          <div class="script-icon">${script.icon}</div>
+          <div class="script-info">
+            <div class="script-name">${script.name}</div>
+            <div class="script-chars">${script.chars}</div>
+          </div>
+          <div class="script-note">${script.noteLabel}</div>
+        `;
+        grid.appendChild(item);
+      });
+    }
     renderScriptGrid();
 
-    // Fetch with timeout
-    async function fetchWithTimeout(url, timeout = 8000) {
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), timeout);
-      
-      try {
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(id);
-        return response;
-      } catch (e) {
-        clearTimeout(id);
-        throw e;
-      }
-    }
-
-    async function fetchContent(repo) {
+    // Fetch repository files from GitHub API
+    async function fetchRepoFiles(repo) {
       const cleanRepo = repo.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\/$/, '');
+      const [owner, repoName] = cleanRepo.split('/');
       
-      const urls = [
-        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/main/README.md`,
-        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/master/README.md`,
-        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/main/package.json`,
-        `https://ghproxy.com/https://raw.githubusercontent.com/${cleanRepo}/master/package.json`,
-      ];
+      if (!owner || !repoName) {
+        throw new Error('Invalid repository format');
+      }
 
-      for (const url of urls) {
+      // Use GitHub API to fetch repository contents
+      const files = [];
+      
+      async function fetchDirectory(path) {
         try {
-          const res = await fetchWithTimeout(url, 8000);
-          if (res.ok) return await res.text();
+          const response = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${path}`, {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+          
+          if (!response.ok) {
+            // If API fails, try with ghproxy for raw content
+            return;
+          }
+          
+          const contents = await response.json();
+          
+          if (Array.isArray(contents)) {
+            for (const item of contents) {
+              if (item.type === 'file' && !item.name.startsWith('.') && !item.name.includes('test')) {
+                // Filter by common code file extensions
+                const ext = item.name.split('.').pop()?.toLowerCase();
+                const codeExts = ['js', 'jsx', 'ts', 'tsx', 'py', 'rb', 'java', 'go', 'rs', 'cpp', 'c', 'h', 'css', 'scss', 'html', 'json', 'md', 'yml', 'yaml', 'xml', 'sh', 'sql', 'vue', 'svelte', 'php', 'swift', 'kt'];
+                
+                if (codeExts.includes(ext) || item.name === 'README.md' || item.name === 'package.json') {
+                  files.push({
+                    name: item.name,
+                    path: item.path,
+                    size: item.size,
+                    download_url: item.download_url
+                  });
+                }
+              } else if (item.type === 'dir' && !item.name.startsWith('.') && !item.name.includes('test') && !item.name.includes('node_modules')) {
+                // Recursively fetch subdirectories (limited depth)
+                if (path === '' && files.length < 50) { // Limit initial fetch
+                  await fetchDirectory(item.path);
+                }
+              }
+            }
+          }
         } catch (e) {
-          // Continue to next URL
+          console.log('GitHub API fetch failed, using fallback');
         }
       }
 
-      return `${cleanRepo}\n\nA development repository.\n\nFeatures:\n- Fast performance\n- Modern design\n- Clean code\n- Easy to use`;
+      await fetchDirectory('');
+      
+      // Sort alphabetically
+      files.sort((a, b) => a.name.localeCompare(b.name));
+      
+      return files;
     }
 
-    generateBtn.addEventListener('click', async () => {
-      const repo = searchInput.value.trim() || 'facebook/react';
-      const repoName = repo.split('/')[1] || repo;
+    // Fetch file content
+    async function fetchFileContent(downloadUrl) {
+      if (!downloadUrl) return '';
       
-      generateBtn.disabled = true;
-      document.getElementById('overlay-text').textContent = 'fetching repo...';
-      document.getElementById('overlay-detail').textContent = repo;
+      try {
+        const response = await fetch(downloadUrl);
+        if (response.ok) {
+          return await response.text();
+        }
+      } catch (e) {
+        console.log('Failed to fetch file content');
+      }
+      
+      return '';
+    }
+
+    // Render files grid
+    function renderFilesGrid(files) {
+      const grid = document.getElementById('files-grid');
+      const section = document.getElementById('repo-files-section');
+      const countEl = document.getElementById('files-count');
+      
+      if (files.length === 0) {
+        grid.innerHTML = '<div class="loading-files">no code files found</div>';
+        section.style.display = 'block';
+        return;
+      }
+
+      countEl.textContent = `${files.length} files`;
+      
+      grid.innerHTML = files.map((file, index) => `
+        <div class="file-item" data-index="${index}" data-path="${file.path}">
+          <div class="file-icon">${getFileIcon(file.name)}</div>
+          <div class="file-info">
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${formatFileSize(file.size)}</div>
+          </div>
+          <div class="file-download">↓ play</div>
+        </div>
+      `).join('');
+
+      // Add click handlers
+      grid.querySelectorAll('.file-item').forEach(item => {
+        item.addEventListener('click', async () => {
+          const index = parseInt(item.dataset.index);
+          await playFile(index);
+        });
+      });
+
+      section.style.display = 'block';
+      downloadAllBtn.disabled = false;
+    }
+
+    // Play a specific file
+    async function playFile(index) {
+      if (index < 0 || index >= repoFiles.length) return;
+      
+      const file = repoFiles[index];
+      initAudio();
+      
+      // Show loading state
+      document.getElementById('overlay-text').textContent = `loading ${file.name}...`;
       document.getElementById('visualizer-overlay').classList.remove('hidden');
-
-      const content = await fetchContent(repo);
-      currentContent = content; // Store content for character-based note mapping
       
-      document.getElementById('overlay-text').textContent = 'generating...';
-      await new Promise(r => setTimeout(r, 1200));
+      // Fetch file content
+      const content = await fetchFileContent(file.download_url);
+      
+      if (!content) {
+        document.getElementById('overlay-text').textContent = 'failed to load';
+        return;
+      }
 
-      // Now an async call that waits for Gemini API if available
-      const analysis = await generateSongStyle(repoName, content);
-
-      document.getElementById('overlay-text').textContent = 'done';
-      document.getElementById('overlay-detail').textContent = '';
-      await new Promise(r => setTimeout(r, 500));
-
-      document.getElementById('overlay-text').textContent = 'press play';
-      document.getElementById('visualizer-overlay').classList.add('hidden');
-
+      currentFileIndex = index;
+      currentRepoName = file.name.replace(/\.[^/.]+$/, '');
+      
+      // Generate song parameters for this file
+      const fileSeed = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const analysis = generateSongStyle(content, fileSeed);
+      currentAnalysis = analysis;
+      
       // Update UI
+      document.querySelectorAll('.file-item').forEach((item, i) => {
+        item.classList.toggle('playing', i === index);
+      });
+
       const moodNames = ['dark', 'melancholic', 'neutral', 'bright', 'radiant'];
       const energyNames = ['calm', 'relaxed', 'moderate', 'energetic', 'intense'];
       const complexityNames = ['minimal', 'simple', 'moderate', 'intricate', 'complex'];
@@ -2130,124 +1727,418 @@ ${content.substring(0, 3000)}`;
       document.getElementById('mood-complexity-bar').style.width = (songState.complexity * 100) + '%';
       document.getElementById('mood-scale').textContent = analysis.scale;
 
-      document.getElementById('song-title').textContent = analysis.title;
-      document.getElementById('song-description').textContent = 
-        `A ${analysis.mood} ${analysis.scale.toLowerCase()} composition at ${analysis.tempo}. ` +
-        `Generated from ${repo}. Features ${analysis.intensity > 0.6 ? 'high energy' : 'controlled'} rhythms.`;
+      const minutes = Math.floor(analysis.duration / 60);
+      const seconds = analysis.duration % 60;
+      const durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
+      document.getElementById('song-title').textContent = file.name;
+      document.getElementById('song-description').textContent = 
+        `A ${analysis.mood} ${analysis.scale.toLowerCase()} track at ${analysis.tempo}. Duration: ${durationStr}`;
       document.getElementById('song-tags').innerHTML = 
         `<span class="tag">${analysis.type}</span>` +
         `<span class="tag">${analysis.scale.toLowerCase()}</span>` +
-        `<span class="tag">${analysis.style}</span>` +
-        (analysis.geminiPowered ? `<span class="tag">AI-powered</span>` : '');
-
-      // Update mapping panel
-      if (analysis.mapping) {
-        const m = analysis.mapping;
-        lastMappingData = m;
-
-        // Project Type mapping
-        const typeNames = {
-          game: 'Game Development',
-          api: 'API / Backend',
-          library: 'Library / Tool',
-          frontend: 'Frontend / UI',
-          backend: 'Backend / Server',
-          ml: 'Machine Learning',
-          data: 'Data / Analytics',
-          mobile: 'Mobile App',
-          devops: 'DevOps / Infrastructure',
-          security: 'Security / Crypto',
-          default: 'General Project'
-        };
-        document.getElementById('mapping-type').textContent = typeNames[m.type] || m.type;
-        document.getElementById('mapping-type-exp').textContent = `${typeNames[m.type] || m.type} repos → ${analysis.style} musical style`;
-
-        // Sentiment mapping
-        const sentimentValue = m.sentiment;
-        let sentimentLabel = 'Neutral';
-        if (sentimentValue > 0.6) sentimentLabel = 'Positive (+)';
-        else if (sentimentValue < 0.4) sentimentLabel = 'Negative (−)';
-        document.getElementById('mapping-sentiment').textContent = sentimentLabel;
-        document.getElementById('mapping-sentiment-exp').textContent =
-          sentimentValue > 0.6 ? 'positive words → major/lydian scales' :
-          sentimentValue < 0.4 ? 'negative words → minor/harmonic scales' :
-          'balanced tone → modal scales';
-
-        // Complexity mapping
-        const complexityValue = m.complexity;
-        let complexityLabel = 'Moderate';
-        if (complexityValue > 0.65) complexityLabel = 'Complex (high)';
-        else if (complexityValue < 0.35) complexityLabel = 'Simple (low)';
-        document.getElementById('mapping-complexity').textContent = complexityLabel;
-        document.getElementById('mapping-complexity-exp').textContent =
-          complexityValue > 0.65 ? 'algorithm terms → rich chord density' :
-          complexityValue < 0.35 ? 'simple code → minimal sparse harmony' :
-          'balanced complexity → moderate chords';
-
-        // Size mapping
-        const sizeValue = m.size;
-        let sizeLabel = 'Medium';
-        if (sizeValue > 10000) sizeLabel = 'Large (extensive)';
-        else if (sizeValue < 2000) sizeLabel = 'Small (compact)';
-        document.getElementById('mapping-size').textContent = sizeLabel;
-        document.getElementById('mapping-size-exp').textContent =
-          sizeValue > 10000 ? 'large repo → more pattern variations' :
-          sizeValue < 2000 ? 'small repo → focused melodic lines' :
-          'medium repo → balanced arrangement';
-
-        // Language/Style mapping
-        const styleNames = {
-          ambient: 'Ambient',
-          rhythmic: 'Rhythmic',
-          melodic: 'Melodic',
-          textural: 'Textural',
-          industrial: 'Industrial',
-          ethereal: 'Ethereal',
-          minimal: 'Minimal',
-          intense: 'Intense',
-          mysterious: 'Mysterious',
-          glitchy: 'Glitchy'
-        };
-        document.getElementById('mapping-language').textContent = styleNames[m.language] || m.language;
-        document.getElementById('mapping-language-exp').textContent =
-          m.type === 'game' ? 'game keywords → intense rhythmic style' :
-          m.type === 'ml' ? 'ML keywords → ethereal textural style' :
-          m.type === 'devops' ? 'devops keywords → industrial style' :
-          `${typeNames[m.type] || m.type} → ${styleNames[m.language]} arrangement`;
-
-        // Mood mapping
-        const moodLabels = {
-          bright: 'Bright & Uplifting',
-          dark: 'Dark & Serious',
-          dramatic: 'Dramatic & Intense',
-          jazzy: 'Jazzy & Soulful',
-          exotic: 'Exotic & Unusual',
-          dreamy: 'Dreamy & Atmospheric',
-          bluesy: 'Bluesy & Warm',
-          tense: 'Tense & Unsettling',
-          soulful: 'Soulful & Expressive',
-          ethereal: 'Ethereal & Spacey'
-        };
-        document.getElementById('mapping-mood').textContent = moodLabels[m.mood] || m.mood;
-        document.getElementById('mapping-mood-exp').textContent =
-          m.sentiment > 0.6 ? 'positive sentiment → bright tonal mood' :
-          m.sentiment < 0.4 ? 'negative sentiment → dark/tense mood' :
-          'neutral sentiment → balanced emotional tone';
-
-        // Show the mapping panel
-        document.getElementById('mapping-panel').style.display = 'block';
-      }
+        `<span class="tag">${durationStr}</span>`;
 
       document.getElementById('analysis-section').style.display = 'block';
-      document.getElementById('download-btn').disabled = false;
-      document.getElementById('status').textContent = `generated: ${analysis.scale.toLowerCase()}`;
+      document.getElementById('status').textContent = `playing: ${file.name}`;
 
-      // Auto play
-      const success = startPlayback();
+      // Start playback
+      document.getElementById('visualizer-overlay').classList.add('hidden');
+      const success = startPlayback(content);
+      
       if (success) {
         playBtn.textContent = '⏸';
         playBtn.classList.add('playing');
+      }
+    }
+
+    // Download single file
+    async function downloadFile(index) {
+      if (index < 0 || index >= repoFiles.length) return;
+      
+      const file = repoFiles[index];
+      const btn = document.querySelectorAll('.file-item')[index].querySelector('.file-download');
+      const originalText = btn.textContent;
+      btn.textContent = 'rendering...';
+      
+      try {
+        const content = await fetchFileContent(file.download_url);
+        if (!content) {
+          alert('Failed to load file');
+          return;
+        }
+
+        const fileSeed = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        generateSongStyle(content, fileSeed);
+
+        // Create offline audio
+        const duration = songState.songDuration || 20;
+        const sampleRate = 44100;
+        const offlineCtx = new OfflineAudioContext(2, duration * sampleRate, sampleRate);
+        
+        const offlineMaster = offlineCtx.createGain();
+        offlineMaster.gain.value = 0.5;
+        
+        const offlineLimiter = offlineCtx.createDynamicsCompressor();
+        offlineLimiter.threshold.value = 0;
+        offlineLimiter.ratio.value = 12;
+        
+        offlineMaster.connect(offlineLimiter);
+        offlineLimiter.connect(offlineCtx.destination);
+
+        // Reverb
+        const convolver = offlineCtx.createConvolver();
+        const reverbLength = sampleRate * 1.5;
+        const impulse = offlineCtx.createBuffer(2, reverbLength, sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+          const data = impulse.getChannelData(ch);
+          for (let i = 0; i < reverbLength; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbLength, 2.5);
+          }
+        }
+        convolver.buffer = impulse;
+        const reverbGain = offlineCtx.createGain();
+        reverbGain.gain.value = 0.1;
+        offlineMaster.connect(convolver);
+        convolver.connect(reverbGain);
+        reverbGain.connect(offlineCtx.destination);
+
+        function offlinePlayNote(freq, time, duration, type = 'sine', vol = 0.4, attack = 0.02, release = 0.1) {
+          const osc = offlineCtx.createOscillator();
+          const gain = offlineCtx.createGain();
+          osc.type = type;
+          osc.frequency.value = freq;
+          const actualAttack = attack * duration;
+          const actualRelease = release * duration;
+          gain.gain.setValueAtTime(0, time);
+          gain.gain.linearRampToValueAtTime(vol, time + actualAttack);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + duration + actualRelease);
+          osc.connect(gain);
+          gain.connect(offlineMaster);
+          osc.start(time);
+          osc.stop(time + duration + actualRelease + 0.02);
+        }
+
+        // Generate audio
+        const secondsPerBeat = 60.0 / songState.tempo;
+        const totalBeats = Math.floor(duration / secondsPerBeat);
+        let contentPos = 0;
+        const scale = songState.scaleNotes;
+        const root = songState.rootNote;
+        const fadeStart = duration - 5;
+
+        for (let beat = 0; beat < totalBeats; beat++) {
+          const time = beat * secondsPerBeat;
+          const bar = Math.floor(beat / 4);
+          const beatInBar = beat % 4;
+          
+          let volMult = 1;
+          if (time >= fadeStart) volMult = Math.max(0, (duration - time) / 5);
+
+          // Bass
+          if (beatInBar === 0 && seededRandom(songState.seed + beat * 15) > 0.1) {
+            const note = root - 12 + scale[Math.floor(seededRandom(songState.seed + beat * 7) * scale.length)];
+            offlinePlayNote(midiToFreq(note), time, secondsPerBeat, songState.oscTypes[0], 0.4 * songState.intensity * volMult, 0.01, 0.15);
+          }
+
+          // Chords
+          if (seededRandom(songState.seed + beat * 18) < songState.chordDensity) {
+            const chordRoot = scale[bar % scale.length];
+            [chordRoot, chordRoot + 4, chordRoot + 7].forEach((note, i) => {
+              offlinePlayNote(midiToFreq(root + note), time + i * 0.015, secondsPerBeat * 1.5, songState.oscTypes[0], 0.15 * songState.intensity * volMult, 0.02, 0.2);
+            });
+          }
+
+          // Melody
+          if (seededRandom(songState.seed + beat * 26) < 0.4 && content) {
+            const char = content[contentPos % content.length];
+            const script = getScriptCategory(char);
+            if (script && script.scaleDegree !== null) {
+              const degreeIndex = script.scaleDegree % scale.length;
+              const midiNote = root + scale[degreeIndex] + (script.octave - 3) * 12;
+              offlinePlayNote(midiToFreq(midiNote), time, secondsPerBeat * 0.75, 'triangle', 0.35 * songState.intensity * volMult, 0.01, 0.15);
+              contentPos++;
+            } else {
+              contentPos++;
+            }
+          } else if (content) {
+            contentPos++;
+          }
+        }
+
+        const buffer = await offlineCtx.startRendering();
+        
+        // Convert to WAV
+        const wavBlob = audioBufferToWAV(buffer);
+        const url = URL.createObjectURL(wavBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${file.name.replace(/\.[^/.]+$/, '')}_sound.wav`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        btn.textContent = 'saved!';
+        setTimeout(() => btn.textContent = originalText, 1500);
+
+      } catch (error) {
+        console.error('Error rendering audio:', error);
+        btn.textContent = 'error';
+        setTimeout(() => btn.textContent = originalText, 1500);
+      }
+    }
+
+    // Download all files
+    async function downloadAll() {
+      if (repoFiles.length === 0) return;
+
+      const btn = downloadAllBtn;
+      const originalText = btn.textContent;
+      btn.textContent = 'rendering...';
+      btn.disabled = true;
+
+      try {
+        // Combine all file contents with separators
+        let combinedContent = '';
+        let totalDuration = 0;
+        
+        // Calculate total duration (15-30 seconds per file)
+        for (const file of repoFiles) {
+          const seed = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const fileDuration = Math.floor(seededRandom(seed + 20) * 15) + 15;
+          totalDuration += fileDuration;
+        }
+
+        const sampleRate = 44100;
+        const offlineCtx = new OfflineAudioContext(2, totalDuration * sampleRate, sampleRate);
+        
+        const offlineMaster = offlineCtx.createGain();
+        offlineMaster.gain.value = 0.5;
+        
+        const offlineLimiter = offlineCtx.createDynamicsCompressor();
+        offlineLimiter.threshold.value = 0;
+        offlineLimiter.ratio.value = 12;
+        
+        offlineMaster.connect(offlineLimiter);
+        offlineLimiter.connect(offlineCtx.destination);
+
+        // Reverb
+        const convolver = offlineCtx.createConvolver();
+        const reverbLength = sampleRate * 1.5;
+        const impulse = offlineCtx.createBuffer(2, reverbLength, sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+          const data = impulse.getChannelData(ch);
+          for (let i = 0; i < reverbLength; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbLength, 2.5);
+          }
+        }
+        convolver.buffer = impulse;
+        const reverbGain = offlineCtx.createGain();
+        reverbGain.gain.value = 0.1;
+        offlineMaster.connect(convolver);
+        convolver.connect(reverbGain);
+        reverbGain.connect(offlineCtx.destination);
+
+        function offlinePlayNote(freq, time, duration, type = 'sine', vol = 0.4, attack = 0.02, release = 0.1) {
+          const osc = offlineCtx.createOscillator();
+          const gain = offlineCtx.createGain();
+          osc.type = type;
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0, time);
+          gain.gain.linearRampToValueAtTime(vol, time + attack * duration);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + duration + release * duration);
+          osc.connect(gain);
+          gain.connect(offlineMaster);
+          osc.start(time);
+          osc.stop(time + duration + release * duration + 0.02);
+        }
+
+        // Generate audio for each file in alphabetical order
+        let currentTime = 0;
+        
+        for (let i = 0; i < repoFiles.length; i++) {
+          const file = repoFiles[i];
+          
+          // Update progress
+          btn.textContent = `rendering ${i + 1}/${repoFiles.length}...`;
+          
+          const content = await fetchFileContent(file.download_url);
+          if (!content) continue;
+          
+          const fileSeed = file.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const analysis = generateSongStyle(content, fileSeed);
+          
+          const duration = songState.songDuration || 20;
+          const secondsPerBeat = 60.0 / songState.tempo;
+          const totalBeats = Math.floor(duration / secondsPerBeat);
+          let contentPos = 0;
+          const scale = songState.scaleNotes;
+          const root = songState.rootNote;
+          const fadeStart = duration - 5;
+
+          for (let beat = 0; beat < totalBeats; beat++) {
+            const time = currentTime + beat * secondsPerBeat;
+            const bar = Math.floor(beat / 4);
+            const beatInBar = beat % 4;
+            
+            let volMult = 1;
+            if (time - currentTime >= fadeStart) volMult = Math.max(0, (currentTime + duration - time) / 5);
+
+            // Bass
+            if (beatInBar === 0 && seededRandom(songState.seed + beat * 15) > 0.1) {
+              const note = root - 12 + scale[Math.floor(seededRandom(songState.seed + beat * 7) * scale.length)];
+              offlinePlayNote(midiToFreq(note), time, secondsPerBeat, songState.oscTypes[0], 0.4 * songState.intensity * volMult, 0.01, 0.15);
+            }
+
+            // Chords
+            if (seededRandom(songState.seed + beat * 18) < songState.chordDensity) {
+              const chordRoot = scale[bar % scale.length];
+              [chordRoot, chordRoot + 4, chordRoot + 7].forEach((note, j) => {
+                offlinePlayNote(midiToFreq(root + note), time + j * 0.015, secondsPerBeat * 1.5, songState.oscTypes[0], 0.15 * songState.intensity * volMult, 0.02, 0.2);
+              });
+            }
+
+            // Melody
+            if (seededRandom(songState.seed + beat * 26) < 0.4 && content) {
+              const char = content[contentPos % content.length];
+              const script = getScriptCategory(char);
+              if (script && script.scaleDegree !== null) {
+                const degreeIndex = script.scaleDegree % scale.length;
+                const midiNote = root + scale[degreeIndex] + (script.octave - 3) * 12;
+                offlinePlayNote(midiToFreq(midiNote), time, secondsPerBeat * 0.75, 'triangle', 0.35 * songState.intensity * volMult, 0.01, 0.15);
+                contentPos++;
+              } else {
+                contentPos++;
+              }
+            } else if (content) {
+              contentPos++;
+            }
+          }
+
+          currentTime += duration + 1; // 1 second gap between tracks
+        }
+
+        btn.textContent = 'finalizing...';
+        
+        const buffer = await offlineCtx.startRendering();
+        const wavBlob = audioBufferToWAV(buffer);
+        
+        const repoClean = searchInput.value.trim().split('/').pop() || 'repo';
+        const url = URL.createObjectURL(wavBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${repoClean}_all_tracks_${Date.now()}.wav`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        btn.textContent = 'saved!';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error rendering all audio:', error);
+        alert('Error rendering audio. Please try again.');
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // Helper: AudioBuffer to WAV
+    function audioBufferToWAV(buffer) {
+      const numChannels = buffer.numberOfChannels;
+      const sampleRate = buffer.sampleRate;
+      const bitDepth = 16;
+      const bytesPerSample = bitDepth / 8;
+      const blockAlign = numChannels * bytesPerSample;
+      const dataLength = buffer.length * blockAlign;
+      const bufferLength = 44 + dataLength;
+      
+      const arrayBuffer = new ArrayBuffer(bufferLength);
+      const view = new DataView(arrayBuffer);
+      
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + dataLength, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, numChannels, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * blockAlign, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, bitDepth, true);
+      writeString(view, 36, 'data');
+      view.setUint32(40, dataLength, true);
+      
+      const channels = [];
+      for (let i = 0; i < numChannels; i++) {
+        channels.push(buffer.getChannelData(i));
+      }
+      
+      let offset = 44;
+      for (let i = 0; i < buffer.length; i++) {
+        for (let ch = 0; ch < numChannels; ch++) {
+          let sample = channels[ch][i];
+          sample = Math.max(-1, Math.min(1, sample));
+          sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+          view.setInt16(offset, sample, true);
+          offset += 2;
+        }
+      }
+      
+      return new Blob([arrayBuffer], { type: 'audio/wav' });
+    }
+
+    function writeString(view, offset, string) {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    }
+
+    // Event handlers
+    generateBtn.addEventListener('click', async () => {
+      const repo = searchInput.value.trim() || 'facebook/react';
+      
+      generateBtn.disabled = true;
+      document.getElementById('overlay-text').textContent = 'fetching repo...';
+      document.getElementById('overlay-detail').textContent = repo;
+      document.getElementById('visualizer-overlay').classList.remove('hidden');
+      document.getElementById('repo-files-section').style.display = 'none';
+
+      try {
+        repoFiles = await fetchRepoFiles(repo);
+        
+        if (repoFiles.length === 0) {
+          // Fallback: try to fetch basic content
+          const cleanRepo = repo.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\/$/, '');
+          const fallbackContent = `${cleanRepo}\n\nA development repository.\n\nFeatures:\n- Fast performance\n- Modern design\n- Clean code`;
+          
+          repoFiles = [{
+            name: 'README.md',
+            path: 'README.md',
+            size: fallbackContent.length,
+            download_url: null,
+            content: fallbackContent
+          }];
+        }
+
+        currentRepoName = repo.split('/')[1] || repo;
+        
+        renderFilesGrid(repoFiles);
+        
+        document.getElementById('overlay-text').textContent = 'ready';
+        document.getElementById('overlay-detail').textContent = `${repoFiles.length} scripts loaded`;
+        document.getElementById('save-btn').disabled = false;
+        
+        await new Promise(r => setTimeout(r, 1000));
+        document.getElementById('visualizer-overlay').classList.add('hidden');
+        document.getElementById('status').textContent = `${repoFiles.length} scripts ready`;
+
+      } catch (error) {
+        console.error('Error fetching repo:', error);
+        document.getElementById('overlay-text').textContent = 'error fetching repo';
+        document.getElementById('overlay-detail').textContent = 'try another repository';
       }
 
       generateBtn.disabled = false;
@@ -2259,89 +2150,42 @@ ${content.substring(0, 3000)}`;
         playBtn.textContent = '▶';
         playBtn.classList.remove('playing');
         document.getElementById('status').textContent = 'paused';
-      } else {
+      } else if (currentContent) {
         const success = startPlayback();
         if (success) {
           playBtn.textContent = '⏸';
           playBtn.classList.add('playing');
           document.getElementById('status').textContent = 'playing';
-          document.getElementById('visualizer-overlay').classList.add('hidden');
         }
       }
     });
 
-    downloadBtn.addEventListener('click', () => {
-      downloadBtn.textContent = 'saved!';
-      downloadBtn.disabled = true;
-      setTimeout(() => {
-        downloadBtn.textContent = '↓ save';
-        downloadBtn.disabled = false;
-      }, 2000);
-    });
+    saveBtn.addEventListener('click', downloadAll);
+    downloadAllBtn.addEventListener('click', downloadAll);
 
     searchInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') generateBtn.click();
     });
 
     // Style navigation
-    let currentStyleIndex = 0;
-    const styleList = Object.keys(styles);
-
     document.getElementById('next-btn').addEventListener('click', () => {
-      currentStyleIndex = (currentStyleIndex + 1) % styleList.length;
-      const styleName = styleList[currentStyleIndex];
-      const style = styles[styleName];
-
-      songState.style = styleName;
-      songState.oscTypes = style.oscTypes;
-      songState.attackStyle = style.attackStyle;
-      songState.tempo = Math.floor(songState.tempo * getRandomRange(0.9, 1.1, 100 + currentStyleIndex));
-      songState.intensity = Math.max(0.2, Math.min(0.9, songState.intensity + getRandomRange(-0.1, 0.1, 200 + currentStyleIndex)));
-
-      if (isPlaying) {
-        stopPlayback();
-        setTimeout(() => startPlayback(), 50);
+      if (repoFiles.length > 0 && currentFileIndex < repoFiles.length - 1) {
+        playFile(currentFileIndex + 1);
       }
-
-      document.getElementById('status').textContent = `${styleName} @ ${songState.tempo}`;
-      document.getElementById('mood-scale').textContent = styleName;
     });
 
     document.getElementById('prev-btn').addEventListener('click', () => {
-      currentStyleIndex = (currentStyleIndex - 1 + styleList.length) % styleList.length;
-      const styleName = styleList[currentStyleIndex];
-      const style = styles[styleName];
-
-      songState.style = styleName;
-      songState.oscTypes = style.oscTypes;
-      songState.attackStyle = style.attackStyle;
-      songState.tempo = Math.floor(songState.tempo * getRandomRange(0.9, 1.1, 300 + currentStyleIndex));
-      songState.intensity = Math.max(0.2, Math.min(0.9, songState.intensity + getRandomRange(-0.1, 0.1, 400 + currentStyleIndex)));
-
-      if (isPlaying) {
-        stopPlayback();
-        setTimeout(() => startPlayback(), 50);
+      if (repoFiles.length > 0 && currentFileIndex > 0) {
+        playFile(currentFileIndex - 1);
       }
-
-      document.getElementById('status').textContent = `${styleName} @ ${songState.tempo}`;
-      document.getElementById('mood-scale').textContent = styleName;
     });
 
-    document.addEventListener('touchstart', function mobileInit() {
+    // Initialize audio on user interaction
+    document.addEventListener('click', function init() {
       initAudio();
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
-      document.removeEventListener('touchstart', mobileInit);
-    }, { once: true });
-    
-    document.addEventListener('click', function desktopInit() {
-      initAudio();
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      document.removeEventListener('click', desktopInit);
+      document.removeEventListener('click', init);
     }, { once: true });
   </script>
-</body>
-</html>
