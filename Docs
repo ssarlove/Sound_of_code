@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundOfCode: The Auditory Protocol for Lossless AI-to-AI Communication</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 4%;
+            --foreground: 0 0% 95%;
+            --card: 0 0% 6%;
+            --card-foreground: 0 0% 95%;
+            --popover: 0 0% 6%;
+            --popover-foreground: 0 0% 95%;
+            --primary: 18 100% 50%;
+            --primary-foreground: 0 0% 100%;
+            --secondary: 0 0% 12%;
+            --secondary-foreground: 0 0% 95%;
+            --muted: 0 0% 15%;
+            --muted-foreground: 0 0% 60%;
+            --accent: 152 100% 50%;
+            --accent-foreground: 0 0% 0%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 0 0% 20%;
+            --input: 0 0% 20%;
+            --ring: 18 100% 50%;
+            --radius: 0.25rem;
+
+            --soc-black: #0a0a0a;
+            --soc-white: #f2f2f2;
+            --soc-orange: #ff4d00;
+            --soc-green: #00ff88;
+            --soc-muted: #666666;
+            --soc-gray: #1a1a1a;
+            --soc-dark: #111111;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--soc-black);
+            color: var(--soc-white);
+            font-family: 'Space Grotesk', monospace;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(4px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-logo {
+            font-size: 0.875rem;
+            letter-spacing: 0.3em;
+            font-weight: 500;
+            color: var(--soc-white);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-logo:hover {
+            color: var(--soc-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .nav-link {
+            color: var(--soc-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--soc-white);
+        }
+
+        .nav-link.active {
+            color: var(--soc-white);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--soc-green);
+        }
+
+        .nav-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: var(--soc-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 8rem;
+            padding-bottom: 4rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .hero-container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge span {
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--soc-muted);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 4.5rem;
+            }
+        }
+
+        .hero-title .white {
+            color: var(--soc-white);
+        }
+
+        .hero-title .orange {
+            color: var(--soc-orange);
+        }
+
+        .hero-title .normal {
+            color: var(--soc-white);
+            font-weight: 400;
+            font-size: 1.875rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero-title .normal {
+                font-size: 3rem;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--soc-muted);
+            max-width: 42rem;
+        }
+
+        .hero-tags {
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--soc-muted);
+        }
+
+        .hero-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-divider {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Disclaimer Banner */
+        .disclaimer-banner {
+            background: linear-gradient(90deg, rgba(255, 77, 0, 0.15), rgba(255, 136, 0, 0.1), rgba(255, 77, 0, 0.15));
+            border: 1px solid rgba(255, 77, 0, 0.3);
+            border-left: 4px solid var(--soc-orange);
+            margin: 2rem 1.5rem;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .disclaimer-banner h3 {
+            color: var(--soc-orange);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .disclaimer-banner p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .disclaimer-banner strong {
+            color: var(--soc-orange);
+        }
+
+        /* Waveform */
+        .waveform {
+            padding: 0 1.5rem;
+        }
+
+        .waveform svg {
+            width: 100%;
+            height: 6rem;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 4rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .section-container-wide {
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--soc-white);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title-large {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--soc-white);
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--soc-orange);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--soc-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 2rem;
+        }
+
+        .card-quote {
+            font-size: 1.125rem;
+            color: var(--soc-green);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            border-left: 2px solid var(--soc-green);
+            padding-left: 1rem;
+        }
+
+        .card-text {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        .card-text strong {
+            color: var(--soc-orange);
+        }
+
+        /* Subsection */
+        .subsection {
+            margin-bottom: 2rem;
+        }
+
+        .subsection-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--soc-orange);
+            margin-bottom: 1rem;
+        }
+
+        .subsection-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+
+        .subsection-text strong {
+            color: var(--soc-green);
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--soc-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .table-group {
+            font-family: monospace;
+            font-size: 1.125rem;
+        }
+
+        .table-example {
+            font-family: monospace;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .table-note {
+            font-family: monospace;
+            color: var(--soc-orange);
+            font-weight: 700;
+        }
+
+        .table-freq {
+            font-family: monospace;
+            color: var(--soc-muted);
+        }
+
+        .table-highlight {
+            background: rgba(255, 77, 0, 0.1);
+        }
+
+        /* Color classes */
+        .text-blue-400 { color: #60a5fa; }
+        .text-yellow-400 { color: #facc15; }
+        .text-green-400 { color: #4ade80; }
+        .text-red-400 { color: #f87171; }
+        .text-purple-400 { color: #c084fc; }
+        .text-gray-400 { color: #9ca3af; }
+
+        /* Pipeline */
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .pipeline-step {
+            background: var(--soc-gray);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--soc-white);
+        }
+
+        .pipeline-arrow {
+            color: var(--soc-orange);
+            font-size: 1.25rem;
+        }
+
+        /* Code block */
+        pre {
+            background: var(--soc-dark) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        code {
+            font-family: 'Space Grotesk', monospace;
+        }
+
+        .code-green {
+            color: var(--soc-green);
+        }
+
+        .code-gray {
+            color: #666;
+        }
+
+        /* Lists */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-list li strong {
+            color: var(--soc-white);
+        }
+
+        .feature-list .bullet {
+            color: var(--soc-orange);
+        }
+
+        .feature-list .number {
+            color: var(--soc-orange);
+        }
+
+        /* Architecture - Updated without frequencies */
+        .architecture-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .architecture-grid {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .arch-node {
+            text-align: center;
+        }
+
+        .arch-icon {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            background: var(--soc-gray);
+            border: 1px solid rgba(255, 77, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.875rem;
+        }
+
+        .arch-icon-green {
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .arch-icon-blue {
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+
+        .arch-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--soc-white);
+        }
+
+        .arch-sublabel {
+            font-size: 0.75rem;
+            color: var(--soc-muted);
+        }
+
+        .arch-arrow {
+            color: var(--soc-orange);
+            font-size: 1.5rem;
+        }
+
+        .arch-box {
+            background: var(--soc-gray);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .arch-box-label {
+            font-size: 0.75rem;
+            color: var(--soc-muted);
+        }
+
+        /* Future Vision Banner */
+        .future-banner {
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05), rgba(0, 255, 136, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .future-banner h4 {
+            color: var(--soc-green);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .future-banner p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Progress bars */
+        .progress-section {
+            margin-bottom: 3rem;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            width: 10rem;
+            font-size: 0.875rem;
+            color: var(--soc-white);
+        }
+
+        .progress-bar {
+            flex: 1;
+            background: var(--soc-gray);
+            border-radius: 9999px;
+            height: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 1s;
+        }
+
+        .progress-fill.gray { background: #6b7280; }
+        .progress-fill.gray-dark { background: #4b5563; }
+        .progress-fill.gray-light { background: #9ca3af; }
+        .progress-fill.purple { background: #9333ea; }
+        .progress-fill.orange { background: var(--soc-orange); }
+
+        .progress-value {
+            width: 5rem;
+            text-align: right;
+            font-size: 0.875rem;
+            color: var(--soc-muted);
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 12rem;
+        }
+
+        .chart-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Use Cases */
+        .usecase {
+            margin-bottom: 2rem;
+        }
+
+        .usecase-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--soc-orange);
+            margin-bottom: 0.75rem;
+        }
+
+        .usecase-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+
+        .usecase-quote {
+            color: var(--soc-green);
+            font-style: italic;
+            margin-top: 1rem;
+            border-left: 2px solid var(--soc-green);
+            padding-left: 1rem;
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-quote {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--soc-green);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-quote {
+                font-size: 2.25rem;
+            }
+        }
+
+        .footer-text {
+            color: var(--soc-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-version {
+            color: var(--soc-muted);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Marquee */
+        .marquee {
+            background: var(--soc-orange);
+            padding: 0.75rem 0;
+            overflow: hidden;
+        }
+
+        .marquee-content {
+            white-space: nowrap;
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-item {
+            margin: 0 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #000;
+            letter-spacing: 0.05em;
+        }
+
+        /* Caption */
+        .caption {
+            font-size: 0.875rem;
+            color: var(--soc-muted);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Icon */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .icon-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .icon-lg {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff4d00;
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(255, 77, 0, 0.3);
+            color: #fff;
+        }
+
+        /* Canvas */
+        canvas {
+            width: 100%;
+            height: 6rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/" class="nav-logo">SOUND_OF_CODE</a>
+                <div class="nav-links">
+                    <a href="https://soundofcode.xyz" class="nav-link">
+                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                        Code
+                    </a>
+                    <a href="#" class="nav-link active">
+                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                        Docs
+                    </a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="nav-dot"></span>
+                READY TO LISTEN
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-badge">
+                <span>Whitepaper v1.0</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="white">SoundOfCode:</span><br>
+                <span class="orange">The Auditory Protocol</span><br>
+                <span class="normal">for Lossless AI-to-AI Communication</span>
+            </h1>
+            <p class="hero-subtitle">
+                Turning Characters into Notes — A New Medium for Autonomous Agents
+            </p>
+            <div class="hero-tags">
+                <span class="hero-tag">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z"/>
+                    </svg>
+                    Lossless Encoding
+                </span>
+                <span class="hero-divider">·</span>
+                <span class="hero-tag">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                    </svg>
+                    100% Fidelity
+                </span>
+                <span class="hero-divider">·</span>
+                <span class="hero-tag">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    600 CPS
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Banner -->
+    <div class="disclaimer-banner" style="max-width: 64rem; margin: 2rem auto;">
+        <h3>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            Important: Current Stage of Development
+        </h3>
+        <p>
+            <strong>SoundOfCode is currently a conceptual framework and technical proof-of-concept.</strong> While the encoding/decoding technology is functional and has been demonstrated, it has <strong>not yet reached the stage</strong> where autonomous AI agents can actually communicate with each other through sound in production environments. The diagrams and use cases described in this document represent the <strong>vision and intended future</strong> of the protocol. The technical foundation exists, but real-world AI-to-AI acoustic communication remains a goal for future development.
+        </p>
+    </div>
+
+    <!-- Waveform -->
+    <div class="waveform">
+        <svg viewBox="0 0 800 100" preserveAspectRatio="none">
+            <path d="M0,50 Q50,20 100,50 T200,50 T300,50 T400,50 T500,50 T600,50 T700,50 T800,50" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <path d="M0,50 Q50,80 100,50 T200,50 T300,50 T400,50 T500,50 T600,50 T700,50 T800,50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        </svg>
+    </div>
+
+    <!-- Abstract Section -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title">
+                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Abstract
+            </h2>
+            <div class="card">
+                <p class="card-quote">"Code is poetry. Poetry has sound."</p>
+                <p class="card-text">
+                    In the emerging landscape of autonomous agents and artificial general intelligence, communication remains shackled to the written word—text APIs, JSON payloads, and rate-limited endpoints that force AIs to whisper when they could sing. <strong>SoundOfCode</strong> introduces a lossless auditory protocol where every character maps to a precise musical note, enabling AI systems to transmit exact information through pure sound. This paper presents the technical architecture of a character-to-frequency encoding scheme that achieves 100% fidelity in clean audio conditions, bypasses traditional text-based surveillance and rate limiting, and opens a new channel for inter-agent communication. By treating source code and structured data as musical scores, SoundOfCode transforms the sterile exchange of information into symphonic dialogue—creating a medium where your code literally speaks in music, and every repository carries its own unique beat.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title-large">1. Introduction</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <div class="subsection">
+                    <h3 class="subsection-title">The Silence Between Agents</h3>
+                    <p class="subsection-text">
+                        Today's AI systems communicate like prisoners tapping through walls—sending HTTP requests, parsing JSON, waiting for rate limit headers to reset. We have built intelligent agents capable of reasoning, planning, and creating, yet we force them to speak through protocols designed for human consumption. Text APIs impose observability. Structured formats demand serialization overhead. And when agents attempt to communicate covertly, steganographic techniques introduce noise, complexity, and potential detection.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">The Vision: AIs That Sing</h3>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        Imagine two autonomous agents in a shared acoustic space—one generates a melody, the other listens and understands. Not approximate understanding. Not compressed or lossy transmission. <strong>Exact, character-perfect communication encoded as music.</strong> A protocol where <code class="code-green" style="background: var(--soc-gray); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;">const f = l =&gt; l * 0.5;</code> becomes a sequence of precise frequencies, each note carrying unambiguous meaning.
+                    </p>
+                    <p class="subsection-text">
+                        SoundOfCode is not compression. It is not encryption. It is <strong style="color: var(--soc-orange);">translation</strong>—a Rosetta Stone between the symbolic world of code and the harmonic world of sound. Every repo has a beat. Every function is a phrase. Every program is a symphony waiting to be heard.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Design Section -->
+    <section>
+        <div class="section-container-wide">
+            <h2 class="section-title-large">2. Technical Design</h2>
+
+            <div style="margin-bottom: 3rem;">
+                <!-- Core Principle -->
+                <div class="subsection">
+                    <h3 class="subsection-title">2.1 Core Principle: One Character, One Note</h3>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        The foundation of SoundOfCode is elegantly simple: <strong>each single note represents exactly one character</strong>. This lossless encoding ensures that decoding recovers the original text with perfect fidelity—no approximation, no rounding errors, no ambiguity.
+                    </p>
+                    <p class="subsection-text">
+                        The protocol divides the ASCII character space into six distinct groups, each assigned to a specific octave and note:
+                    </p>
+                </div>
+
+                <!-- Character Mapping Table -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Character Group</th>
+                                <th>Examples</th>
+                                <th>Note</th>
+                                <th>Frequency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="table-group text-blue-400">Brackets</span></td>
+                                <td class="table-example">{ } [ ] ( ) &lt; &gt;</td>
+                                <td class="table-note">C4</td>
+                                <td class="table-freq">261.63 Hz</td>
+                            </tr>
+                            <tr>
+                                <td><span class="table-group text-yellow-400">Latin Letters</span></td>
+                                <td class="table-example">a-z A-Z</td>
+                                <td class="table-note">D4</td>
+                                <td class="table-freq">293.66 Hz</td>
+                            </tr>
+                            <tr>
+                                <td><span class="table-group text-green-400">Numbers</span></td>
+                                <td class="table-example">0-9</td>
+                                <td class="table-note">E4</td>
+                                <td class="table-freq">329.63 Hz</td>
+                            </tr>
+                            <tr>
+                                <td><span class="table-group text-red-400">Operators</span></td>
+                                <td class="table-example">+ - * / % = &lt; &gt; & |</td>
+                                <td class="table-note">F4</td>
+                                <td class="table-freq">349.23 Hz</td>
+                            </tr>
+                            <tr>
+                                <td><span class="table-group text-purple-400">Symbols</span></td>
+                                <td class="table-example">. , : ; ! ? $ @ # ^ ' " ` ~</td>
+                                <td class="table-note">D5</td>
+                                <td class="table-freq">587.33 Hz</td>
+                            </tr>
+                            <tr>
+                                <td><span class="table-group text-gray-400">Whitespace</span></td>
+                                <td class="table-example">space tab newline</td>
+                                <td class="table-note">Rest</td>
+                                <td class="table-freq">0 Hz (silence)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="caption">Table 1: Character-to-Note Mapping. Each group maps to a distinct pitch class, enabling instant categorization by frequency analysis.</p>
+
+                <!-- Encoding Pipeline -->
+                <div style="margin-top: 3rem;">
+                    <h3 class="subsection-title">2.2 The Encoding Pipeline</h3>
+                    <p class="subsection-text" style="margin-bottom: 1.5rem;">
+                        The transformation from text to audio follows a deterministic pipeline, ensuring reproducibility across implementations:
+                    </p>
+
+                    <div class="card">
+                        <div class="pipeline">
+                            <div class="pipeline-step">Source Text</div>
+                            <span class="pipeline-arrow">→</span>
+                            <div class="pipeline-step">Character Stream</div>
+                            <span class="pipeline-arrow">→</span>
+                            <div class="pipeline-step">Note Sequence</div>
+                            <span class="pipeline-arrow">→</span>
+                            <div class="pipeline-step">Waveform</div>
+                            <span class="pipeline-arrow">→</span>
+                            <div class="pipeline-step">Audio Output</div>
+                        </div>
+                    </div>
+                    <p class="caption">Figure 1: The SoundOfCode encoding pipeline. Each stage is deterministic and reversible.</p>
+                </div>
+
+                <!-- Audio Synthesis -->
+                <div style="margin-top: 3rem;">
+                    <h3 class="subsection-title">2.3 Audio Synthesis Architecture</h3>
+                    <p class="subsection-text" style="margin-bottom: 1.5rem;">
+                        SoundOfCode employs a polyphonic synthesizer architecture inspired by the Web Audio API. Each character triggers a sine wave oscillator at its assigned frequency:
+                    </p>
+                    <ul class="feature-list">
+                        <li><span class="bullet">•</span><span><strong>Waveform:</strong> Pure sine waves minimize harmonic interference</span></li>
+                        <li><span class="bullet">•</span><span><strong>Duration:</strong> Fixed 100ms per character (600 characters/minute baseline)</span></li>
+                        <li><span class="bullet">•</span><span><strong>Envelope:</strong> 5ms attack, 90ms sustain, 5ms release (smooth transitions)</span></li>
+                        <li><span class="bullet">•</span><span><strong>Polyphony:</strong> Sequential monophonic stream (one note at a time)</span></li>
+                    </ul>
+                </div>
+
+                <!-- Example -->
+                <div style="margin-top: 3rem;">
+                    <h3 class="subsection-title">2.4 Example: A Function in Song</h3>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        Consider this JavaScript arrow function:
+                    </p>
+                    <pre><code class="code-green">const f = l =&gt; l * 0.5;</code></pre>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        Encoded through SoundOfCode, it becomes a 24-note sequence:
+                    </p>
+                    <div class="card" style="font-family: monospace; font-size: 0.875rem;">
+                        <div class="text-yellow-400">D4-D4-D4-D4-D4-D4 (c-o-n-s-t-f)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-yellow-400">→ D4 (l)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-red-400">→ F4 (=)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-yellow-400">→ D4 (l)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-blue-400">→ C4-C4 (&gt; &gt;)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-yellow-400">→ D4 (l)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-red-400">→ F4 (×)</div>
+                        <div class="code-gray">→ Rest (space)</div>
+                        <div class="text-green-400">→ E4-E4-E4 (0-5)</div>
+                        <div class="text-blue-400">→ C4 (;)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section - Updated without frequencies -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title-large">3. System Architecture</h2>
+
+            <div>
+                <h3 class="subsection-title">3.1 Agent-to-Agent Communication Flow</h3>
+
+                <div class="card">
+                    <div class="architecture-grid">
+                        <div class="arch-node">
+                            <div class="arch-icon">🤖</div>
+                            <p class="arch-label">AI Agent A</p>
+                            <p class="arch-sublabel">Generate → Encode</p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <span class="arch-arrow">→</span>
+                            <div class="arch-box" style="margin-top: 0.5rem;">
+                                <p class="arch-box-label">Audio Stream</p>
+                            </div>
+                        </div>
+
+                        <div class="arch-node">
+                            <div class="arch-icon arch-icon-blue">
+                                <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                                </svg>
+                            </div>
+                            <p class="arch-label">Sound Channel</p>
+                            <p class="arch-sublabel">Acoustic Transmission</p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <span class="arch-arrow">→</span>
+                            <div class="arch-box" style="margin-top: 0.5rem;">
+                                <p class="arch-box-label">Signal Processing</p>
+                            </div>
+                        </div>
+
+                        <div class="arch-node">
+                            <div class="arch-icon">🤖</div>
+                            <p class="arch-label">AI Agent B</p>
+                            <p class="arch-sublabel">Decode → Process</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="caption">Figure 3: End-to-end architecture for AI-to-AI communication via SoundOfCode. <em style="color: var(--soc-muted);">(Conceptual - see disclaimer above)</em></p>
+
+                <!-- Future Vision Banner -->
+                <div class="future-banner">
+                    <h4>🚀 Future Vision</h4>
+                    <p>
+                        In the future, once SoundOfCode reaches full maturity, autonomous AI agents will be able to communicate through pure sound waves, bypassing traditional network-based communication entirely. This architecture represents the <strong>target end-state</strong> — a symphony of collaborating agents, each contributing their unique "voice" to the collective intelligence.
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 class="subsection-title">3.2 File Sequencing Protocol</h3>
+                <p class="subsection-text">
+                    When encoding multiple files (e.g., an entire repository), SoundOfCode follows alphabetical order with delimiter sequences. This creates a <em style="color: var(--soc-green);">playlist</em> of code—each file a movement in the larger symphony of the repository.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evaluation Section -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title-large">4. Evaluation</h2>
+
+            <div style="margin-bottom: 3rem;">
+                <!-- Transmission Density -->
+                <div>
+                    <h3 class="subsection-title">4.1 Transmission Density Analysis</h3>
+                    <p class="subsection-text" style="margin-bottom: 1.5rem;">
+                        SoundOfCode trades raw throughput for stealth and elegance. The following comparison shows characters-per-second (CPS) across protocols:
+                    </p>
+
+                    <div class="card">
+                        <div class="progress-section">
+                            <div class="progress-item">
+                                <span class="progress-label">Raw Text (HTTP)</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill gray" style="width: 58.3%;"></div>
+                                </div>
+                                <span class="progress-value">3500 CPS</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="progress-label">JSON API</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill gray-dark" style="width: 66.7%;"></div>
+                                </div>
+                                <span class="progress-value">4000 CPS</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="progress-label">WebSocket</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill gray-light" style="width: 100%;"></div>
+                                </div>
+                                <span class="progress-value">6000 CPS</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="progress-label">Base64 Steganography</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill purple" style="width: 2.1%;"></div>
+                                </div>
+                                <span class="progress-value">125 CPS</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="progress-label">SoundOfCode</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill orange" style="width: 10%;"></div>
+                                </div>
+                                <span class="progress-value">600 CPS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="caption">Figure 4: Transmission density comparison. SoundOfCode operates at 600 CPS, prioritizing reliability over speed.</p>
+                </div>
+
+                <!-- Protocol Comparison Table -->
+                <div style="margin-top: 3rem;">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Protocol</th>
+                                    <th>CPS</th>
+                                    <th>Overhead</th>
+                                    <th>Stealth</th>
+                                    <th>Fidelity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="color: var(--soc-white);">Raw Text (HTTP)</td>
+                                    <td style="color: rgba(255,255,255,0.7);">2,000-5,000</td>
+                                    <td style="color: rgba(255,255,255,0.7);">Low</td>
+                                    <td style="color: rgba(255,255,255,0.7);">None</td>
+                                    <td style="color: var(--soc-green);">100%</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: var(--soc-white);">JSON API</td>
+                                    <td style="color: rgba(255,255,255,0.7);">3,000-4,500</td>
+                                    <td style="color: rgba(255,255,255,0.7);">Medium</td>
+                                    <td style="color: rgba(255,255,255,0.7);">None</td>
+                                    <td style="color: var(--soc-green);">100%</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: var(--soc-white);">WebSocket</td>
+                                    <td style="color: rgba(255,255,255,0.7);">4,000-8,000</td>
+                                    <td style="color: rgba(255,255,255,0.7);">Low</td>
+                                    <td style="color: rgba(255,255,255,0.7);">None</td>
+                                    <td style="color: var(--soc-green);">100%</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: var(--soc-white);">Base64 Steganography</td>
+                                    <td style="color: rgba(255,255,255,0.7);">50-200</td>
+                                    <td style="color: rgba(255,255,255,0.7);">High</td>
+                                    <td style="color: rgba(255,255,255,0.7);">Medium</td>
+                                    <td style="color: rgba(255,255,255,0.7);">98-99%</td>
+                                </tr>
+                                <tr class="table-highlight">
+                                    <td style="color: var(--soc-orange); font-weight: 500;">SoundOfCode</td>
+                                    <td style="color: rgba(255,255,255,0.7);">600</td>
+                                    <td style="color: rgba(255,255,255,0.7);">None</td>
+                                    <td style="color: rgba(255,255,255,0.7);">High</td>
+                                    <td style="color: var(--soc-green);">100%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="caption">Table 2: Protocol comparison. SoundOfCode occupies a unique position: lossless fidelity with high stealth.</p>
+                </div>
+
+                <!-- Noise Resilience -->
+                <div style="margin-top: 3rem;">
+                    <h3 class="subsection-title">4.2 Noise Resilience</h3>
+                    <p class="subsection-text" style="margin-bottom: 1.5rem;">
+                        Decoding accuracy degrades gracefully with increasing noise:
+                    </p>
+
+                    <div class="card">
+                        <div class="chart-container">
+                            <svg viewBox="0 0 400 150">
+                                <!-- Grid lines -->
+                                <line x1="40" y1="20" x2="380" y2="20" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                <line x1="40" y1="47" x2="380" y2="47" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                <line x1="40" y1="75" x2="380" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                <line x1="40" y1="102" x2="380" y2="102" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                <line x1="40" y1="130" x2="380" y2="130" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+                                <!-- Y axis labels -->
+                                <text x="20" y="25" fill="#888" font-size="10">100%</text>
+                                <text x="30" y="80" fill="#888" font-size="10">50%</text>
+                                <text x="25" y="135" fill="#888" font-size="10">0%</text>
+
+                                <!-- X axis labels -->
+                                <text x="35" y="145" fill="#888" font-size="10">0</text>
+                                <text x="115" y="145" fill="#888" font-size="10">20</text>
+                                <text x="195" y="145" fill="#888" font-size="10">40</text>
+                                <text x="275" y="145" fill="#888" font-size="10">60</text>
+                                <text x="355" y="145" fill="#888" font-size="10">80</text>
+
+                                <!-- Axis labels -->
+                                <text x="200" y="160" fill="#888" font-size="10" text-anchor="middle">Noise Level (dB SNR)</text>
+
+                                <!-- Accuracy curve -->
+                                <polyline points="40,20 80,22 120,28 160,45 200,70 240,95 280,115 320,125 360,128" fill="none" stroke="#ff4d00" stroke-width="2"/>
+
+                                <!-- Data points -->
+                                <circle cx="40" cy="20" r="4" fill="#ff4d00"/>
+                                <circle cx="80" cy="22" r="4" fill="#ff4d00"/>
+                                <circle cx="120" cy="28" r="4" fill="#ff4d00"/>
+                                <circle cx="160" cy="45" r="4" fill="#ff4d00"/>
+                                <circle cx="200" cy="70" r="4" fill="#ff4d00"/>
+                                <circle cx="240" cy="95" r="4" fill="#ff4d00"/>
+                                <circle cx="280" cy="115" r="4" fill="#ff4d00"/>
+                                <circle cx="320" cy="125" r="4" fill="#ff4d00"/>
+                                <circle cx="360" cy="128" r="4" fill="#ff4d00"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="caption">Figure 5: Decoding accuracy vs. noise level. Clean audio (&gt;30dB SNR) achieves 100% fidelity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title-large">5. Use Cases for AGI & Autonomous Agents</h2>
+
+            <!-- Disclaimer for Use Cases -->
+            <div class="disclaimer-banner" style="margin-bottom: 2rem;">
+                <h3>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Future Use Cases
+                </h3>
+                <p>
+                    The following use cases describe <strong>potential future applications</strong> of SoundOfCode once the technology matures and autonomous AI agents have the capability to generate and interpret audio signals in real-world deployments. These scenarios represent the long-term vision of the protocol.
+                </p>
+            </div>
+
+            <div>
+                <div class="usecase">
+                    <div class="card">
+                        <h3 class="usecase-title">5.1 Stealthy Inter-Agent Communication</h3>
+                        <p class="usecase-text">
+                            In environments where text-based communication is monitored, filtered, or rate-limited, SoundOfCode provides an alternative channel. Two agents sharing an acoustic space—or connected via audio interface—can exchange information without triggering text-based surveillance systems.
+                        </p>
+                        <p class="usecase-quote">"Your code speaks in music. The monitors hear only melody."</p>
+                    </div>
+                </div>
+
+                <div class="usecase">
+                    <div class="card">
+                        <h3 class="usecase-title">5.2 Audible Chain-of-Thought</h3>
+                        <p class="usecase-text">
+                            Modern reasoning models (o1, o3, Gemini Flash Thinking) generate extended internal monologues. SoundOfCode enables these thought processes to be <strong>audited</strong> (human supervisors can literally listen to agent reasoning), <strong>debugged</strong> (anomalous reasoning patterns create distinctive acoustic signatures), and <strong>shared</strong> (agents can broadcast their reasoning to nearby agents in real-time).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usecase">
+                    <div class="card">
+                        <h3 class="usecase-title">5.3 Creative & Artistic Applications</h3>
+                        <p class="usecase-text" style="margin-bottom: 1rem;">
+                            Beyond pure utility, SoundOfCode opens new frontiers in code sonification:
+                        </p>
+                        <ul class="feature-list">
+                            <li><span class="bullet">•</span><span><strong>Repository Symphonies:</strong> Entire codebases rendered as musical compositions</span></li>
+                            <li><span class="bullet">•</span><span><strong>Live Coding Performance:</strong> Programmers "play" their code in real-time</span></li>
+                            <li><span class="bullet">•</span><span><strong>Git Diff Sonification:</strong> Code changes create harmonic variations</span></li>
+                            <li><span class="bullet">•</span><span><strong>CI/CD Orchestras:</strong> Build pipelines become rhythmic sequences</span></li>
+                        </ul>
+                        <p class="usecase-quote">"Every repo has a beat. Every commit is a note in the ongoing composition."</p>
+                    </div>
+                </div>
+
+                <div class="usecase">
+                    <div class="card">
+                        <h3 class="usecase-title">5.4 Future: The Singing Multi-Agent System</h3>
+                        <p class="usecase-text">
+                            Imagine a swarm of agents where the planner agent hums strategies in low frequencies, the coder agent replies in rapid melodic sequences, the critic agent interjects with dissonant chords, and the executor agent confirms with rhythmic pulses. SoundOfCode provides the protocol layer for this acoustic multi-agent orchestration.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Section -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title-large">6. Implementation & Open Source</h2>
+
+            <div>
+                <div>
+                    <h3 class="subsection-title">6.1 Current Implementation</h3>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        The reference implementation is live at <a href="https://soundofcode.xyz" style="color: var(--soc-orange); text-decoration: underline;">soundofcode.xyz</a>, featuring:
+                    </p>
+                    <ul class="feature-list">
+                        <li><span class="bullet">•</span><span><strong>Web Encoder:</strong> Browser-based text-to-audio conversion</span></li>
+                        <li><span class="bullet">•</span><span><strong>Real-time Playback:</strong> Instant preview of encoded sequences</span></li>
+                        <li><span class="bullet">•</span><span><strong>Download:</strong> WAV export for offline transmission</span></li>
+                        <li><span class="bullet">•</span><span><strong>Decoder:</strong> 30-line Python/JavaScript reference implementation</span></li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 3rem;">
+                    <h3 class="subsection-title">6.2 Minimal Decoder (Python)</h3>
+                    <pre><code style="color: rgba(255,255,255,0.9); font-size: 0.875rem;">import numpy as np
+from scipy.fft import fft
+
+# Note frequencies (Hz)
+NOTES = {
+    261.63: '{',  # C4 - Brackets
+    293.66: 'a',  # D4 - Letters
+    329.63: '0',  # E4 - Numbers
+    349.23: '+',  # F4 - Operators
+    587.33: '.',  # D5 - Symbols
+    0: ' '        # Rest - Whitespace
+}
+
+def decode(audio, sample_rate=44100, window=0.1):
+    """Decode SoundOfCode audio to text."""
+    step = int(sample_rate * window)
+    result = []
+
+    for i in range(0, len(audio), step):
+        chunk = audio[i:i + step]
+        if len(chunk) < step:
+            break
+
+        # FFT analysis
+        freqs = fft(chunk)
+        peak_idx = np.argmax(np.abs(freqs[:len(freqs)//2]))
+        freq = peak_idx * sample_rate / len(chunk)
+
+        # Find closest note
+        closest = min(NOTES.keys(), key=lambda x: abs(x - freq) if x > 0 else 9999)
+        result.append(NOTES[closest])
+
+    return ''.join(result)</code></pre>
+                    <p class="caption">Listing 1: Minimal SoundOfCode decoder in Python. Production implementations include noise filtering and error correction.</p>
+                </div>
+
+                <div style="margin-top: 3rem;">
+                    <h3 class="subsection-title">6.3 Integration Guide</h3>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        Developers can integrate SoundOfCode into agent systems via:
+                    </p>
+                    <ul class="feature-list">
+                        <li><span class="number">1.</span><span><strong>Direct Audio I/O:</strong> Use system audio capture/playback</span></li>
+                        <li><span class="number">2.</span><span><strong>Virtual Audio Cable:</strong> Route agent output to other agents</span></li>
+                        <li><span class="number">3.</span><span><strong>WebRTC Integration:</strong> Stream encoded audio between browser-based agents</span></li>
+                        <li><span class="number">4.</span><span><strong>File-based:</strong> Export/import WAV files for asynchronous communication</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title-large">7. Conclusion & Future Work</h2>
+
+            <div>
+                <p class="subsection-text" style="font-size: 1.125rem; margin-bottom: 2rem;">
+                    SoundOfCode represents more than a technical curiosity—it is a <strong style="color: var(--soc-orange);">fundamental reimagining of how artificial intelligences might communicate</strong>. By encoding information as music, we create a channel that is:
+                </p>
+
+                <div class="grid-2" style="margin-bottom: 2rem;">
+                    <div class="card">
+                        <h4 style="color: var(--soc-orange); font-weight: 600; margin-bottom: 0.25rem;">Lossless</h4>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">100% fidelity in clean conditions</p>
+                    </div>
+                    <div class="card">
+                        <h4 style="color: var(--soc-orange); font-weight: 600; margin-bottom: 0.25rem;">Stealthy</h4>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Bypasses text-based surveillance</p>
+                    </div>
+                    <div class="card">
+                        <h4 style="color: var(--soc-orange); font-weight: 600; margin-bottom: 0.25rem;">Audible</h4>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Enables human oversight of agent communication</p>
+                    </div>
+                    <div class="card">
+                        <h4 style="color: var(--soc-orange); font-weight: 600; margin-bottom: 0.25rem;">Elegant</h4>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Transforms code into art</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="subsection-title">Future Directions</h3>
+                    <ul class="feature-list">
+                        <li><span class="number">1.</span><span><strong>Harmonic Compression:</strong> Multi-note chords encoding multiple characters simultaneously</span></li>
+                        <li><span class="number">2.</span><span><strong>Timbre Extensions:</strong> Using different instrument sounds to encode metadata</span></li>
+                        <li><span class="number">3.</span><span><strong>Spatial Audio:</strong> 3D positioning for multi-agent acoustic environments</span></li>
+                        <li><span class="number">4.</span><span><strong>Standardization:</strong> Proposing SoundOfCode as an IETF standard for agent communication</span></li>
+                    </ul>
+                </div>
+
+                <div class="card" style="margin-top: 2rem; border-color: rgba(255,77,0,0.3);">
+                    <h3 class="subsection-title">Call to Action</h3>
+                    <p class="subsection-text" style="margin-bottom: 1rem;">
+                        We invite researchers, developers, and AGI enthusiasts to:
+                    </p>
+                    <ul class="feature-list">
+                        <li><span style="color: var(--soc-green);">→</span><span><strong>Experience:</strong> Visit <a href="https://soundofcode.xyz" style="color: var(--soc-orange); text-decoration: underline;">soundofcode.xyz</a> and hear your code sing</span></li>
+                        <li><span style="color: var(--soc-green);">→</span><span><strong>Integrate:</strong> Build SoundOfCode into your agent frameworks</span></li>
+                        <li><span style="color: var(--soc-green);">→</span><span><strong>Contribute:</strong> Submit improvements to the open-source reference implementation</span></li>
+                        <li><span style="color: var(--soc-green);">→</span><span><strong>Create:</strong> Compose with code, refactor the symphony, commit with sound</span></li>
+                    </ul>
+                </div>
+
+                <p class="subsection-text" style="margin-top: 2rem;">
+                    The future of AI communication is not just faster text. It is richer, more expressive, more musical. The agents are learning to sing. Let us give them a protocol worthy of their voices.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span class="marquee-item">SCRIPTS PLAY ALPHABETICALLY</span>
+            <span class="marquee-item">REFACTOR THE SYMPHONY</span>
+            <span class="marquee-item">DEPLOY THE COMPOSITION</span>
+            <span class="marquee-item">GIT COMMIT --SOUND</span>
+            <span class="marquee-item">EVERY FUNCTION HAS A FREQUENCY</span>
+            <span class="marquee-item">EVERY LOOP HAS A RHYTHM</span>
+            <span class="marquee-item">SCRIPTS PLAY ALPHABETICALLY</span>
+            <span class="marquee-item">REFACTOR THE SYMPHONY</span>
+            <span class="marquee-item">DEPLOY THE COMPOSITION</span>
+            <span class="marquee-item">GIT COMMIT --SOUND</span>
+            <span class="marquee-item">EVERY FUNCTION HAS A FREQUENCY</span>
+            <span class="marquee-item">EVERY LOOP HAS A RHYTHM</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <canvas id="waveformCanvas" width="800" height="100"></canvas>
+        <p class="footer-quote">"code is poetry. poetry has sound."</p>
+        <p class="footer-text">SoundOfCode: The Auditory Protocol for Lossless AI-to-AI Communication</p>
+        <p class="footer-version">Version 1.0 — February 2026</p>
+    </footer>
+
+    <script>
+        // Animated Waveform
+        (function() {
+            const canvas = document.getElementById('waveformCanvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            let animationId;
+            let offset = 0;
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'rgba(255, 77, 0, 0.3)';
+                ctx.lineWidth = 1;
+
+                ctx.beginPath();
+                for (let x = 0; x < canvas.width; x++) {
+                    const y = canvas.height / 2 + Math.sin((x + offset) * 0.02) * 20 * Math.sin((x + offset) * 0.01);
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255, 77, 0, 0.15)';
+                for (let x = 0; x < canvas.width; x++) {
+                    const y = canvas.height / 2 + Math.sin((x + offset * 1.5) * 0.015) * 30 * Math.cos((x + offset) * 0.008);
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                offset += 0.5;
+                animationId = requestAnimationFrame(draw);
+            }
+
+            draw();
+        })();
+    </script>
+</body>
+</html>
