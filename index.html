@@ -838,12 +838,172 @@
       }
     }
   </style>
+    <style>
+      :root {
+        --background: 0 0% 4%;
+        --foreground: 0 0% 95%;
+        --card: 0 0% 6%;
+        --card-foreground: 0 0% 95%;
+        --popover: 0 0% 6%;
+        --popover-foreground: 0 0% 95%;
+        --primary: 18 100% 50%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 0 0% 12%;
+        --secondary-foreground: 0 0% 95%;
+        --muted: 0 0% 15%;
+        --muted-foreground: 0 0% 60%;
+        --accent: 152 100% 50%;
+        --accent-foreground: 0 0% 0%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 20%;
+        --input: 0 0% 20%;
+        --ring: 18 100% 50%;
+        --radius: 0.25rem;
+
+        --soc-black: #0a0a0a;
+        --soc-white: #f2f2f2;
+        --soc-orange: #ff4d00;
+        --soc-green: #00ff88;
+        --soc-muted: #666666;
+        --soc-gray: #1a1a1a;
+        --soc-dark: #111111;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--soc-black);
+        color: var(--soc-white);
+        font-family: 'Space Grotesk', monospace;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Navigation */
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(10, 10, 10, 0.9);
+        backdrop-filter: blur(4px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .nav-container {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .nav-logo {
+        font-size: 0.875rem;
+        letter-spacing: 0.3em;
+        font-weight: 500;
+        color: var(--soc-white);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .nav-logo:hover {
+        color: var(--soc-orange);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        font-size: 0.875rem;
+      }
+
+      .nav-link {
+        color: var(--soc-muted);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.2s;
+      }
+
+      .nav-link:hover {
+        color: var(--soc-white);
+      }
+
+      .nav-link.active {
+        color: var(--soc-white);
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        color: var(--soc-green);
+      }
+
+      .nav-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--soc-green);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      /* Icons (used in nav links) */
+      .icon-sm {
+        width: 1rem;
+        height: 1rem;
+      }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">sound_of_code</div>
-    <div class="status" id="status">ready to listen</div>
-  </header>
+    <!-- Navigation (user-provided header) -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-left">
+          <a href="/" class="nav-logo">SOUND_OF_CODE</a>
+          <div class="nav-links">
+            <a href="/" class="nav-link">
+              <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+              </svg>
+              Code
+            </a>
+            <a href="/docs/" class="nav-link active">
+              <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+              Docs
+            </a>
+          </div>
+        </div>
+        <div class="nav-right">
+          <span class="nav-dot"></span>
+          <span id="status">READY TO LISTEN</span>
+        </div>
+      </div>
+    </nav>
 
   <main>
     <section class="hero">
@@ -2189,3 +2349,24 @@
       document.removeEventListener('click', init);
     }, { once: true });
   </script>
+  <script>
+    // Nav active link logic: marks Code or Docs active based on current filename
+    (function() {
+      const links = document.querySelectorAll('.nav-link');
+      const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+      links.forEach(a => {
+        const href = a.getAttribute('href') || '';
+        const target = href.split('/').pop().toLowerCase();
+        if ((target === '' && (current === 'index.html' || current === '')) || target === current) {
+          a.classList.add('active');
+        } else if (target === 'docs.html' && (current === 'docs.html')) {
+          a.classList.add('active');
+        } else {
+          a.classList.remove('active');
+        }
+      });
+    })();
+  </script>
+
+  </body>
+  </html>
