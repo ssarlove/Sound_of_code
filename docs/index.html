@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Docs — SoundOfCode</title>
+    <meta name="robots" content="noindex">
+    <script>
+      // Fetch the full Docs.html and render it in-place so /docs/ serves the docs without .html
+      (async function(){
+        try {
+          const res = await fetch('/Docs.html');
+          const html = await res.text();
+          document.open();
+          document.write(html);
+          document.close();
+        } catch (e) {
+          document.body.innerHTML = '<p style="color:#fff;background:#111;padding:2rem">Failed to load docs.</p>';
+          console.error('Failed to load /Docs.html', e);
+        }
+      })();
+    </script>
+  </head>
+  <body style="background:#0a0a0a;color:#fff;font-family:system-ui,monospace">
+    <p style="padding:2rem">Loading docs…</p>
+  </body>
+</html>
