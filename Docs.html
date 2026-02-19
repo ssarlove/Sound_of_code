@@ -791,7 +791,7 @@
                         </svg>
                         Code
                     </a>
-                    <a href="docs.html" class="nav-link active">
+                    <a href="/docs/" class="nav-link active">
                         <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
@@ -1548,21 +1548,33 @@ def decode(audio, sample_rate=44100, window=0.1):
         })();
     </script>
     <script>
-        // Nav active link logic for docs page
+        // Nav active link logic: keep Docs highlighted when on /docs/ and Code on root
         (function() {
             const links = document.querySelectorAll('.nav-link');
-            const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-            links.forEach(a => {
+            const pathname = (location.pathname || '/').toLowerCase();
+            links.forEach(a => a.classList.remove('active'));
+
+            if (pathname === '/' || pathname === '' || pathname === '/index.html') {
+                const code = document.querySelector('.nav-link[href="/"]');
+                if (code) code.classList.add('active');
+                return;
+            }
+
+            if (pathname.startsWith('/docs')) {
+                const docs = document.querySelector('.nav-link[href="/docs/"]') || document.querySelector('.nav-link[href="/docs"]');
+                if (docs) docs.classList.add('active');
+                return;
+            }
+
+            // Fallback: match by filename
+            const currentFile = pathname.split('/').pop();
+            for (const a of links) {
                 const href = a.getAttribute('href') || '';
-                const target = href.split('/').pop().toLowerCase();
-                if ((target === '' && (current === 'index.html' || current === '')) || target === current) {
+                if (href.toLowerCase().includes(currentFile)) {
                     a.classList.add('active');
-                } else if (target === 'docs.html' && current === 'docs.html') {
-                    a.classList.add('active');
-                } else {
-                    a.classList.remove('active');
+                    break;
                 }
-            });
+            }
         })();
     </script>
 </body>
