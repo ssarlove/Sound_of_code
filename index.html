@@ -45,6 +45,13 @@
       --script-operators: #ce9178;
       --script-symbols: #d16969;
       --script-whitespace: #808080;
+      --soc-black: #0a0a0a;
+      --soc-white: #f2f2f2;
+      --soc-orange: #ff4d00;
+      --soc-green: #00ff88;
+      --soc-muted: #666666;
+      --soc-gray: #1a1a1a;
+      --soc-dark: #111111;
     }
 
     body {
@@ -125,7 +132,7 @@
     }
 
     .hero h1 .highlight {
-      color: var(--accent);
+      color: var(--accent) !important;
       position: relative;
       display: inline-block;
     }
@@ -839,37 +846,6 @@
     }
   </style>
     <style>
-      :root {
-        --background: 0 0% 4%;
-        --foreground: 0 0% 95%;
-        --card: 0 0% 6%;
-        --card-foreground: 0 0% 95%;
-        --popover: 0 0% 6%;
-        --popover-foreground: 0 0% 95%;
-        --primary: 18 100% 50%;
-        --primary-foreground: 0 0% 100%;
-        --secondary: 0 0% 12%;
-        --secondary-foreground: 0 0% 95%;
-        --muted: 0 0% 15%;
-        --muted-foreground: 0 0% 60%;
-        --accent: 152 100% 50%;
-        --accent-foreground: 0 0% 0%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 20%;
-        --input: 0 0% 20%;
-        --ring: 18 100% 50%;
-        --radius: 0.25rem;
-
-        --soc-black: #0a0a0a;
-        --soc-white: #f2f2f2;
-        --soc-orange: #ff4d00;
-        --soc-green: #00ff88;
-        --soc-muted: #666666;
-        --soc-gray: #1a1a1a;
-        --soc-dark: #111111;
-      }
-
       * {
         box-sizing: border-box;
         margin: 0;
@@ -990,7 +966,7 @@
               </svg>
               Code
             </a>
-            <a href="/docs/" class="nav-link active">
+            <a href="/docs/" class="nav-link">
               <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
               </svg>
@@ -2350,21 +2326,35 @@
     }, { once: true });
   </script>
   <script>
-    // Nav active link logic: marks Code or Docs active based on current filename
+    // Nav active link logic: set Code active on root and Docs active on /docs/
     (function() {
       const links = document.querySelectorAll('.nav-link');
-      const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-      links.forEach(a => {
+      const pathname = (location.pathname || '/').toLowerCase();
+      links.forEach(a => a.classList.remove('active'));
+
+      // Code (root)
+      if (pathname === '/' || pathname === '' || pathname === '/index.html') {
+        const code = document.querySelector('.nav-link[href="/"]') || document.querySelector('.nav-link[href="./"]');
+        if (code) code.classList.add('active');
+        return;
+      }
+
+      // Docs (any path under /docs)
+      if (pathname.startsWith('/docs')) {
+        const docsLink = document.querySelector('.nav-link[href="/docs/"]') || document.querySelector('.nav-link[href="/docs"]');
+        if (docsLink) docsLink.classList.add('active');
+        return;
+      }
+
+      // Fallback: try matching by filename
+      const currentFile = pathname.split('/').pop();
+      for (const a of links) {
         const href = a.getAttribute('href') || '';
-        const target = href.split('/').pop().toLowerCase();
-        if ((target === '' && (current === 'index.html' || current === '')) || target === current) {
+        if (href.toLowerCase().includes(currentFile)) {
           a.classList.add('active');
-        } else if (target === 'docs.html' && (current === 'docs.html')) {
-          a.classList.add('active');
-        } else {
-          a.classList.remove('active');
+          break;
         }
-      });
+      }
     })();
   </script>
 
